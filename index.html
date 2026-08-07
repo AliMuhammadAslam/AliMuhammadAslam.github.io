@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ali Muhammad | Full-Stack AI Engineer</title>
+<meta name="description" content="Full-stack AI engineer building production LLM and RAG systems: retrieval pipelines, agentic workflows and real-time voice AI. Contributions merged into Google ADK and LangChain." />
+<meta name="author" content="Ali Muhammad" />
+<meta name="theme-color" content="#0d0b15" />
+
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="Ali Muhammad | Full-Stack AI Engineer" />
+<meta property="og:description" content="Production LLM and RAG systems: retrieval pipelines, agentic workflows and real-time voice AI." />
+<meta property="og:url" content="https://alimuhammadaslam.github.io/" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D0B15'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='monospace' font-weight='700' fill='%23FF5C35'>A</text></svg>" />
+
+<script>
+  /* Runs before first paint.
+     1. `js` gates every opacity:0 animation state, so if the bundle fails to
+        load or throws, the page still renders as readable static content
+        instead of a blank screen.
+     2. Theme is resolved here to avoid a light/dark flash on load.
+     3. The failsafe clears the preloader if boot never finishes. */
+  (function () {
+    var r = document.documentElement;
+    r.classList.add('js');
+    try {
+      /* Dark by default regardless of system preference: the hero shader and
+         accent glows are designed for it. Light stays available via the toggle
+         and is remembered once chosen. */
+      r.dataset.theme = localStorage.getItem('theme') || 'dark';
+    } catch (e) { r.dataset.theme = 'dark'; }
+
+    setTimeout(function () {
+      if (!r.classList.contains('is-booted')) {
+        r.classList.add('is-booted', 'boot-failed');
+        var p = document.getElementById('preloader');
+        if (p) p.remove();
+      }
+    }, 5000);
+  })();
+</script>
+
+  <script type="module" crossorigin src="/assets/index-DocYWtji.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-XEd3lEJB.css">
+</head>
+<body>
+
+<noscript>
+  <style>[data-anim],.lede .w{opacity:1!important;transform:none!important}.preloader{display:none!important}</style>
+</noscript>
+
+<a class="skip" href="#work">Skip to content</a>
+
+<!-- preloader -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader__inner">
+    <span class="preloader__name">ALI MUHAMMAD</span>
+    <span class="preloader__count" id="preloader-count">00</span>
+  </div>
+  <div class="preloader__bar"><i id="preloader-fill"></i></div>
+</div>
+
+<!-- fixed chrome -->
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><div class="cursor__dot"></div><div class="cursor__ring"></div></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a href="#top" class="nav__mark" data-cursor="link">
+    <span class="nav__mark-glyph">A</span>
+    <span class="nav__mark-text">Ali Muhammad</span>
+  </a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#work" data-cursor="link"><span>01</span> Work</a>
+    <a href="#opensource" data-cursor="link"><span>02</span> Open Source</a>
+    <a href="#experience" data-cursor="link"><span>03</span> Experience</a>
+    <a href="#stack" data-cursor="link"><span>04</span> Stack</a>
+    <a href="#contact" data-cursor="link"><span>05</span> Contact</a>
+  </nav>
+  <button class="nav__theme" id="theme-toggle" data-cursor="link" aria-label="Switch colour theme">
+    <svg viewBox="0 0 24 24" class="icon-moon" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    <svg viewBox="0 0 24 24" class="icon-sun" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M22 12h-2.6M4.6 12H2M19.07 4.93l-1.84 1.84M6.77 17.23l-1.84 1.84M19.07 19.07l-1.84-1.84M6.77 6.77 4.93 4.93"/></svg>
+  </button>
+</header>
+
+<main id="top">
+
+<!-- hero -->
+<section class="hero" id="hero">
+  <canvas class="hero__gl" id="gl" aria-hidden="true"></canvas>
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <div class="hero__body" id="hero-body">
+    <p class="hero__eyebrow" data-anim="fade">
+      <span class="pulse" aria-hidden="true"></span>
+      Full-Stack AI Engineer &nbsp;·&nbsp; Karachi, PK
+    </p>
+
+    <h1 class="hero__name" data-split>Ali Muhammad</h1>
+
+    <div class="hero__meta">
+      <p class="hero__lede" data-anim="fade" data-delay="0.08">
+        I build production LLM and RAG systems: retrieval pipelines, agentic
+        workflows and real-time voice AI. I take them from prototype through
+        security hardening to live users.
+      </p>
+      <dl class="hero__spec" data-anim="fade" data-delay="0.16">
+        <div><dt>Now</dt><dd>Software Consultant, Ten Pearls</dd></div>
+        <div><dt>Focus</dt><dd>LLM · RAG · Agents · Voice</dd></div>
+        <div><dt>OSS</dt><dd>Google ADK · LangChain</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__actions" data-anim="fade" data-delay="0.24">
+      <a href="#work" class="btn btn--primary" data-magnetic data-cursor="link">
+        <span>Selected work</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+      <button class="btn" id="copy-mail" data-magnetic data-cursor="link" data-mail="aaalimohdaslam@gmail.com">
+        <span class="btn__label">Copy email</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
+</section>
+
+<!-- marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track" id="marquee-track">
+    <span>LangChain</span><i>◆</i><span>RAG Pipelines</span><i>◆</i><span>OpenAI Realtime</span><i>◆</i>
+    <span>AWS Bedrock</span><i>◆</i><span>Agentic Workflows</span><i>◆</i><span>pgvector</span><i>◆</i>
+    <span>Pinecone</span><i>◆</i><span>FastAPI</span><i>◆</i><span>Voice AI</span><i>◆</i>
+    <span>PyTorch</span><i>◆</i><span>TypeScript</span><i>◆</i><span>Terraform</span><i>◆</i>
+  </div>
+</div>
+
+<!-- intro -->
+<section class="section intro" id="intro">
+  <p class="lede" data-words>
+    Across four production client systems in healthcare, pharma and enterprise IT,
+    I have designed retrieval architectures, hardened platforms for release and
+    shipped a real-time voice agent that answers the phone. Before engineering I
+    spent two years in product and project management at a national payments
+    company, which is why I think about delivery and not just models.
+  </p>
+
+  <div class="stats">
+    <div class="stat" data-anim="rise">
+      <span class="stat__num" data-count="90" data-suffix="%+">0</span>
+      <span class="stat__label">Client-rated quality, usability &amp; accuracy<em>Across delivered production systems</em></span>
+    </div>
+    <div class="stat" data-anim="rise" data-delay="0.08">
+      <span class="stat__num" data-count="4">0</span>
+      <span class="stat__label">Production AI systems delivered<em>Healthcare, pharma &amp; enterprise IT</em></span>
+    </div>
+    <div class="stat" data-anim="rise" data-delay="0.16">
+      <span class="stat__num" data-count="10" data-suffix="+">0</span>
+      <span class="stat__label">Domains built in<em>RAG · Voice · Agents · Vision · NLP · Deep Learning · Web · Mobile · Cloud · Data &amp; BI</em></span>
+    </div>
+    <div class="stat" data-anim="rise" data-delay="0.24">
+      <span class="stat__num" data-count="2">0</span>
+      <span class="stat__label">Open source contributions<em>Merged into Google ADK &amp; LangChain</em></span>
+    </div>
+  </div>
+</section>
+
+<!-- work -->
+<section class="section" id="work" data-accent="coral">
+  <div class="section__head">
+    <span class="section__idx">01</span>
+    <h2 class="section__title" data-anim="rise">Selected Work</h2>
+    <p class="section__note" data-anim="fade">
+      Client systems are proprietary and unlinked. Personal and academic projects
+      link through to source.
+    </p>
+  </div>
+
+  <h3 class="group__label" data-anim="fade">Production at Ten Pearls</h3>
+  <ul class="worklist">
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">01</span>
+        <span class="work__head">
+          <span class="work__title">Medical RAG Chatbot</span>
+          <span class="work__client">Global pharmaceutical client</span>
+        </span>
+        <span class="work__stack">RAG · Citations · Security</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Clinical guidance chatbot for liver and kidney transplant care. I raised
+          response quality and citation accuracy to <strong>97% in client UAT</strong>,
+          then led the security hardening and production readiness effort that took the
+          platform live, coordinating backend, frontend and DevOps through UAT into
+          production.</p>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">02</span>
+        <span class="work__head">
+          <span class="work__title">Multilingual Clinical Assistant</span>
+          <span class="work__client">Medical education client</span>
+        </span>
+        <span class="work__stack">Vectorstore · EN/ES · UI</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Built cross-language (English and Spanish) retrieval into the assistant's
+          vectorstore architecture, and made citations reliable and persistent across the
+          platform. Also delivered a full frontend redesign including rebranding and
+          UX updates to client specification.</p>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">03</span>
+        <span class="work__head">
+          <span class="work__title">AI Health Coaching Assistant</span>
+          <span class="work__client">Digital health client</span>
+        </span>
+        <span class="work__stack">RAG · Guardrails · Infra</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Built the end-to-end retrieval-augmented generation pipeline from scratch,
+          covering document ingestion through to response generation. Designed separate
+          patient and clinician chat experiences with dedicated safety guardrails, and held
+          the platform stable through infrastructure hardening, rate limiting and access
+          control.</p>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">04</span>
+        <span class="work__head">
+          <span class="work__title">Voice AI IT Helpdesk</span>
+          <span class="work__client">International retail client · Solo build</span>
+        </span>
+        <span class="work__stack">Realtime Voice · Twilio · Jira</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>A voice AI helpdesk employees call to resolve L1 IT issues, with automatic
+          escalation into Jira. I designed the real-time voice architecture end to end,
+          handling concurrent audio streams and conversational flow, then demoed the proof
+          of concept directly to the client and <strong>secured the full project award</strong>
+          for my employer.</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <h3 class="group__label" data-anim="fade">Personal &amp; Academic</h3>
+  <ul class="worklist">
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">05</span>
+        <span class="work__head">
+          <span class="work__title">Realtime AI Voice Agent</span>
+          <span class="work__client">Low-latency conversational voice</span>
+        </span>
+        <span class="work__stack">Python · OpenAI Realtime</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Streaming voice agent handling live bidirectional audio and turn-taking.</p>
+          <a class="work__link" href="https://github.com/AliMuhammadAslam/Realtime-AI-Voice-Agent" target="_blank" rel="noopener" data-cursor="link">View source <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">06</span>
+        <span class="work__head">
+          <span class="work__title">Payment Scheme Analyzer</span>
+          <span class="work__client">Multi-agent document analysis</span>
+        </span>
+        <span class="work__stack">Python · CrewAI · Agents</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Crew of cooperating agents that parse and compare card scheme rulebooks,
+          built on the payments domain knowledge from my time at 1LINK.</p>
+          <a class="work__link" href="https://github.com/AliMuhammadAslam/CrewAI-Multi-Agent-Payment-Scheme-Analyzer" target="_blank" rel="noopener" data-cursor="link">View source <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">07</span>
+        <span class="work__head">
+          <span class="work__title">Blood Connect</span>
+          <span class="work__client">Final year project</span>
+        </span>
+        <span class="work__stack">React Native · AI matching</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Full-stack Android app with an intelligent chat assistant and an AI-based
+          donor to recipient matching mechanism.</p>
+          <a class="work__link" href="https://github.com/AliMuhammadAslam/Blood-Donation-System" target="_blank" rel="noopener" data-cursor="link">View source <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">08</span>
+        <span class="work__head">
+          <span class="work__title">AR Marketing Hub</span>
+          <span class="work__client">Augmented-reality campaign platform</span>
+        </span>
+        <span class="work__stack">React · Node · AI chat</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Full-stack marketing platform with integrated AI chat.</p>
+          <a class="work__link" href="https://github.com/AliMuhammadAslam/AR-Marketing-Hub-Web-App" target="_blank" rel="noopener" data-cursor="link">View source <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">09</span>
+        <span class="work__head">
+          <span class="work__title">3D Bounding Box Estimation</span>
+          <span class="work__client">Computer vision research</span>
+        </span>
+        <span class="work__stack">Python · PyTorch · OpenCV</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Estimating 3D object extents and orientation from monocular imagery.</p>
+          <a class="work__link" href="https://github.com/AliMuhammadAslam/3D-Bounding-Box-Estimation" target="_blank" rel="noopener" data-cursor="link">View source <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </li>
+    <li class="work">
+      <button class="work__toggle" aria-expanded="false" data-cursor="view">
+        <span class="work__idx">10</span>
+        <span class="work__head">
+          <span class="work__title">AWS Infrastructure as Code</span>
+          <span class="work__client">Terraform, Docker &amp; BI integration</span>
+        </span>
+        <span class="work__stack">Terraform · Docker · AWS</span>
+        <span class="work__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="work__detail">
+        <div class="work__detail-in">
+          <p>Provisioned AWS infrastructure with Terraform, covering EC2, NGINX, SSL and
+          PostgreSQL, wired to BI reporting.</p>
+          <a class="work__link" href="https://github.com/AliMuhammadAslam/DevOps-AWS-Infrastructure-Deployment" target="_blank" rel="noopener" data-cursor="link">View source <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <h3 class="group__label" data-anim="fade">Also Built</h3>
+  <ul class="also" data-anim="fade">
+    <li><a href="https://github.com/AliMuhammadAslam/AWS-Transformer-Sentiment-Analysis" target="_blank" rel="noopener" data-cursor="link">Transformer Sentiment Analysis on AWS <i>Python</i></a></li>
+    <li><a href="https://github.com/AliMuhammadAslam/Programming-Quantum-Computers" target="_blank" rel="noopener" data-cursor="link">Quantum Computing Notebooks <i>Jupyter</i></a></li>
+    <li><a href="https://github.com/AliMuhammadAslam/Streamlit-Deep-Learning-Web-App" target="_blank" rel="noopener" data-cursor="link">Deep Learning Web App <i>Streamlit</i></a></li>
+    <li><a href="https://github.com/AliMuhammadAslam/Flask-Deep-Learning-Web-App" target="_blank" rel="noopener" data-cursor="link">Deep Learning Web App <i>Flask</i></a></li>
+    <li><a href="https://github.com/AliMuhammadAslam/Terraform-AWS-EC2" target="_blank" rel="noopener" data-cursor="link">Terraform EC2 with NGINX &amp; SSL <i>HCL</i></a></li>
+    <li><a href="https://github.com/AliMuhammadAslam/STAM-Virtual-Mart" target="_blank" rel="noopener" data-cursor="link">STAM Virtual Mart <i>Java</i></a></li>
+    <li><a href="https://github.com/AliMuhammadAslam/Teacher-Resource-Tool" target="_blank" rel="noopener" data-cursor="link">Teacher Resource Tool <i>Java</i></a></li>
+    <li><span>E-Doctor <i>Coursework</i></span></li>
+    <li><span>Power BI dashboards on Azure <i>Analytics</i></span></li>
+    <li><span>Neural nets, autoencoders &amp; CNNs <i>Coursework</i></span></li>
+  </ul>
+
+
+  <a class="allrepos" href="https://github.com/AliMuhammadAslam?tab=repositories" target="_blank" rel="noopener" data-magnetic data-cursor="link">
+    <span>All repositories on GitHub</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+  </a>
+</section>
+
+<!-- open source -->
+<section class="section" id="opensource" data-accent="violet">
+  <div class="section__head">
+    <span class="section__idx">02</span>
+    <h2 class="section__title" data-anim="rise">Open Source</h2>
+    <p class="section__note" data-anim="fade">
+      Contributions accepted into the frameworks I build on every day.
+    </p>
+  </div>
+
+  <div class="oss">
+    <article class="oss__card" data-anim="rise" data-tilt>
+      <header class="oss__top">
+        <svg class="oss__logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <div>
+          <p class="oss__repo">google / adk-python</p>
+          <p class="oss__sub">Agent Development Kit</p>
+        </div>
+        <span class="oss__badge">Merged</span>
+      </header>
+      <p class="oss__msg">test(agent_transfer): add regression tests for non-LlmAgent peer transfers</p>
+      <p class="oss__body">
+        Found a crash when non-<code>LlmAgent</code> peers were used in agent transfer,
+        then landed regression coverage for <code>LoopAgent</code>, <code>SequentialAgent</code>
+        and <code>ParallelAgent</code> peers.
+      </p>
+      <footer class="oss__foot">
+        <a href="https://github.com/google/adk-python/pull/6210" target="_blank" rel="noopener" data-cursor="link">PR #6210</a>
+        <span class="oss__sha">58a14e1</span>
+      </footer>
+    </article>
+
+    <article class="oss__card" data-anim="rise" data-delay="0.1" data-tilt>
+      <header class="oss__top">
+        <svg class="oss__logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+        <div>
+          <p class="oss__repo">langchain-ai / langchain</p>
+          <p class="oss__sub">Core framework</p>
+        </div>
+        <span class="oss__badge">Merged</span>
+      </header>
+      <p class="oss__msg">fix(langchain-classic): align <code>arank_fusion</code> normalization with <code>rank_fusion</code></p>
+      <p class="oss__body">
+        <code>EnsembleRetriever</code>'s async path raised a <code>ValidationError</code> on
+        inputs the sync path handled fine. Aligned the two so both wrap bare strings
+        identically.
+      </p>
+      <footer class="oss__foot">
+        <a href="https://github.com/langchain-ai/langchain/pull/38051" target="_blank" rel="noopener" data-cursor="link">PR #38051</a>
+        <span class="oss__sha">d74e537</span>
+      </footer>
+    </article>
+  </div>
+</section>
+
+<!-- experience -->
+<section class="section" id="experience" data-accent="amber">
+  <div class="section__head">
+    <span class="section__idx">03</span>
+    <h2 class="section__title" data-anim="rise">Experience</h2>
+  </div>
+
+  <div class="timeline">
+    <span class="timeline__rail" aria-hidden="true"><i id="rail-fill"></i></span>
+
+    <article class="tl" data-anim="rise">
+      <div class="tl__when"><span>Jul 2026</span><em>Present</em></div>
+      <div class="tl__what">
+        <h3>Software Consultant, Full-Stack AI Engineer <span class="tl__tag">Promotion</span></h3>
+        <p class="tl__org">Ten Pearls (Pvt.) Ltd.</p>
+        <p>Promoted from Associate. Leading retrieval architecture and production
+        readiness across client AI platforms, from pipeline design through security
+        hardening to live release.</p>
+      </div>
+    </article>
+
+    <article class="tl" data-anim="rise">
+      <div class="tl__when"><span>Oct 2025</span><em>Jul 2026</em></div>
+      <div class="tl__what">
+        <h3>Associate Software Consultant, Full-Stack AI Engineer</h3>
+        <p class="tl__org">Ten Pearls (Pvt.) Ltd.</p>
+        <p>Delivered production LLM and RAG systems plus full-stack AI applications
+        across four client projects in healthcare, pharma and enterprise IT support,
+        covering retrieval pipeline design, security hardening and cross-team delivery.</p>
+      </div>
+    </article>
+
+    <article class="tl" data-anim="rise">
+      <div class="tl__when"><span>Mar 2025</span><em>Oct 2025</em></div>
+      <div class="tl__what">
+        <h3>Management Trainee Officer, Product Management</h3>
+        <p class="tl__org">1LINK (Pvt.) Limited</p>
+        <p>Directed design and feature use cases for a new payment app, producing BRDs,
+        FSDs, SOPs and UI flows, and led SIT and UAT. Contributed to 1GO with the State
+        Bank of Pakistan's RAAST P2M service, enabling QR payments and Request-to-Pay.</p>
+      </div>
+    </article>
+
+    <article class="tl" data-anim="rise">
+      <div class="tl__when"><span>Feb 2024</span><em>Mar 2025</em></div>
+      <div class="tl__what">
+        <h3>Management Trainee Officer, Project Management</h3>
+        <p class="tl__org">1LINK (Pvt.) Limited</p>
+        <p>Ran the certification pipeline for banks, government bodies and financial
+        institutions onboarding to 1LINK services, clearing 45+ integrations against
+        Visa, MasterCard and UnionPay scheme requirements. Led internal initiatives
+        including the SDRS revamp and deployment of AI-driven fraud management systems.</p>
+      </div>
+    </article>
+
+    <article class="tl" data-anim="rise">
+      <div class="tl__when"><span>Internship</span><em>EFU General</em></div>
+      <div class="tl__what">
+        <h3>Software Development Intern</h3>
+        <p class="tl__org">EFU General Insurance Ltd.</p>
+        <p>Implemented the Surveyor System Module in Oracle APEX, contributed to ETL and
+        analysis work, and developed GET and POST REST APIs.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- stack -->
+<section class="section" id="stack" data-accent="cyan">
+  <div class="section__head">
+    <span class="section__idx">04</span>
+    <h2 class="section__title" data-anim="rise">Stack</h2>
+  </div>
+
+  <div class="stack">
+    <div class="stack__group" data-anim="rise">
+      <h3>AI &amp; LLM Engineering</h3>
+      <ul data-chips><li>LangChain</li><li>RAG pipelines</li><li>OpenAI GPT-4o</li><li>Realtime API</li><li>Whisper</li><li>AWS Bedrock</li><li>Claude</li><li>Cohere embed/rerank</li><li>Agentic workflows</li><li>Prompt engineering</li><li>Voice AI</li></ul>
+    </div>
+    <div class="stack__group" data-anim="rise" data-delay="0.06">
+      <h3>Full-Stack</h3>
+      <ul data-chips><li>React</li><li>TypeScript</li><li>Vite</li><li>Node.js</li><li>Express</li><li>FastAPI</li><li>Flask</li><li>Prisma</li><li>SQLAlchemy&nbsp;(async)</li></ul>
+    </div>
+    <div class="stack__group" data-anim="rise" data-delay="0.12">
+      <h3>Data &amp; Vector Stores</h3>
+      <ul data-chips><li>PostgreSQL</li><li>pgvector</li><li>Pinecone</li><li>SQLite</li><li>Pandas</li><li>NumPy</li></ul>
+    </div>
+    <div class="stack__group" data-anim="rise" data-delay="0.18">
+      <h3>ML Frameworks</h3>
+      <ul data-chips><li>Python</li><li>SQL</li><li>PyTorch</li><li>TensorFlow</li><li>Keras</li><li>Scikit-learn</li><li>XGBoost</li></ul>
+    </div>
+    <div class="stack__group" data-anim="rise" data-delay="0.24">
+      <h3>Cloud &amp; DevOps</h3>
+      <ul data-chips><li>AWS ECS</li><li>ECR</li><li>Bedrock</li><li>boto3</li><li>Azure AI</li><li>Azure Cloud</li><li>Docker</li><li>Terraform</li><li>GitHub Actions</li><li>Jenkins</li><li>Twilio Voice</li><li>Jira REST API</li></ul>
+    </div>
+    <div class="stack__group" data-anim="rise" data-delay="0.3">
+      <h3>Vision, Analytics &amp; Platform</h3>
+      <ul data-chips><li>OpenCV</li><li>YOLO</li><li>Power BI</li><li>Tableau</li><li>Matplotlib</li><li>Power Apps</li><li>Microsoft 365 (ATP)</li><li>Oracle APEX</li></ul>
+    </div>
+  </div>
+
+  <div class="creds">
+    <div class="cred" data-anim="fade">
+      <h3>Education</h3>
+      <ul>
+        <li><b>Master's</b>, Institute of Business Administration <em>2023 to 2026 · CGPA 3.59 · Dean's List</em></li>
+        <li><b>Bachelor's</b>, Institute of Business Administration <em>2019 to 2023 · CGPA 3.63 · Dean's List</em></li>
+        <li><b>A Levels</b>, Nixor College <em>3 A*, 1 A · Scholarship · Teaching Assistant</em></li>
+        <li><b>O Levels</b>, Foundation Public School <em>6 A*, 4 A</em></li>
+      </ul>
+    </div>
+    <div class="cred" data-anim="fade" data-delay="0.1">
+      <h3>Recognition</h3>
+      <ul>
+        <li><b>Google AI Fellowship</b>, selected on the Ten Pearls team <em>Initiative by Google &amp; SAP</em></li>
+        <li><b>Google Project Management</b>, Professional Certificate <em>Issued by Google</em></li>
+        <li><b>CFO, IBA HR Club</b> <em>2022 to 2023</em></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- contact -->
+<section class="section contact" id="contact" data-accent="coral">
+  <span class="section__idx">05</span>
+  <h2 class="contact__big" data-split>Let's build</h2>
+  <p class="contact__lede" data-anim="fade">
+    Open to conversations about AI engineering, retrieval systems and voice agents.
+  </p>
+  <button class="contact__mail" id="copy-mail-2" data-magnetic data-cursor="link" data-mail="aaalimohdaslam@gmail.com">
+    <span class="btn__label">aaalimohdaslam@gmail.com</span>
+  </button>
+  <div class="contact__links">
+    <a href="mailto:aaalimohdaslam@gmail.com" data-cursor="link">Email</a>
+    <a href="https://www.linkedin.com/in/alimuhammadaslam" target="_blank" rel="noopener" data-cursor="link">LinkedIn</a>
+    <a href="https://github.com/AliMuhammadAslam" target="_blank" rel="noopener" data-cursor="link">GitHub</a>
+  </div>
+</section>
+
+</main>
+
+<button class="totop" id="totop" aria-label="Back to top" data-cursor="link">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<footer class="foot">
+  <span>© <span id="year">2026</span> Ali Muhammad</span>
+  <a href="#top" data-cursor="link">Back to top ↑</a>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
