@@ -64,8 +64,8 @@ void main() {
 
   float field = smoothstep(0.16, 0.94, f) + halo;
 
-  vec3 base   = mix(vec3(0.039, 0.031, 0.071), vec3(1.000, 0.992, 0.984), uLight);
-  vec3 mid    = mix(vec3(0.118, 0.071, 0.180), vec3(0.988, 0.933, 0.898), uLight);
+  vec3 base   = mix(vec3(0.051, 0.043, 0.082), vec3(0.984, 0.984, 0.988), uLight);
+  vec3 mid    = mix(vec3(0.129, 0.086, 0.192), vec3(0.953, 0.957, 0.968), uLight);
   vec3 warm   = mix(vec3(1.000, 0.361, 0.208), vec3(0.941, 0.290, 0.090), uLight);
   vec3 amber  = mix(vec3(1.000, 0.690, 0.125), vec3(0.851, 0.522, 0.000), uLight);
 

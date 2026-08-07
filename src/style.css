@@ -13,15 +13,18 @@
   --accent-3:   #a855f7;
   --accent-4:   #22d3ee;
 
-  --bg:        #08060f;
-  --bg-2:      #0f0b1a;
-  --bg-3:      #171029;
-  --surface:   rgba(255, 138, 96, .05);
-  --line:      rgba(255, 190, 165, .13);
-  --line-soft: rgba(255, 190, 165, .07);
-  --ink:       #fdf7f4;
-  --ink-2:     #b6a8ab;
-  --ink-3:     #7b6d75;
+  /* Lifted off true black. Near-black flattens: every surface collapses into
+     the background and the page reads heavy. A few points up gives the cards
+     and rules room to separate. */
+  --bg:        #0d0b15;
+  --bg-2:      #15111f;
+  --bg-3:      #1e182c;
+  --surface:   rgba(255, 150, 110, .06);
+  --line:      rgba(255, 195, 172, .15);
+  --line-soft: rgba(255, 195, 172, .085);
+  --ink:       #fdf8f6;
+  --ink-2:     #c0b3b6;
+  --ink-3:     #8b7d85;
 
   /* Per-section accent. Overridden by [data-accent] blocks below so each
      section carries its own hue without needing bespoke rules. */

@@ -415,19 +415,35 @@ const PREVIEW_HUES: Record<string, [number, number]> = {
   p5: [300, 355], p6: [28, 46],
 };
 
-function initWork() {
+function initWork(lenis: Lenis | null) {
   const preview = $('#preview');
   const inner = $('#preview-inner');
   const usePreview = Boolean(preview && inner) && fine && !reduced;
 
-  let moveX: ((v: number) => void) | null = null;
-  let moveY: ((v: number) => void) | null = null;
+  // Kept so the looping gradient tween can be killed. Without this every
+  // hover stacked another infinite tween on the same element.
+  let shimmer: gsap.core.Tween | null = null;
+
+  const hidePreview = () => {
+    if (!preview) return;
+    shimmer?.kill();
+    shimmer = null;
+    gsap.to(preview, { opacity: 0, scale: 0.85, duration: 0.25, ease: 'power2.in' });
+  };
 
   if (usePreview && preview) {
-    gsap.set(preview, { xPercent: -50, yPercent: -50, scale: 0.85 });
-    moveX = gsap.quickTo(preview, 'x', { duration: 0.55, ease: 'power3' });
-    moveY = gsap.quickTo(preview, 'y', { duration: 0.55, ease: 'power3' });
-    window.addEventListener('pointermove', (e) => { moveX!(e.clientX); moveY!(e.clientY); }, { passive: true });
+    gsap.set(preview, { xPercent: -50, yPercent: -50, scale: 0.85, opacity: 0 });
+    const moveX = gsap.quickTo(preview, 'x', { duration: 0.55, ease: 'power3' });
+    const moveY = gsap.quickTo(preview, 'y', { duration: 0.55, ease: 'power3' });
+    window.addEventListener('pointermove', (e) => { moveX(e.clientX); moveY(e.clientY); }, { passive: true });
+
+    // The preview is position:fixed and follows the pointer globally. If you
+    // hover a row and then scroll without moving the mouse, no pointerleave
+    // ever fires and it stays pinned on screen over whatever scrolls beneath.
+    lenis?.on('scroll', hidePreview);
+    window.addEventListener('scroll', hidePreview, { passive: true });
+    $('#work')?.addEventListener('pointerleave', hidePreview);
+    document.addEventListener('visibilitychange', hidePreview);
   }
 
   $$('.work').forEach((item) => {
@@ -456,14 +472,13 @@ function initWork() {
       inner.style.background =
         `linear-gradient(135deg, hsl(${a} 80% 30%), hsl(${b} 92% 58%), hsl(${a} 80% 30%))`;
       gsap.to(preview, { opacity: 1, scale: 1, duration: 0.35, ease: 'power3.out' });
-      gsap.fromTo(inner,
+      shimmer?.kill();
+      shimmer = gsap.fromTo(inner,
         { backgroundPosition: '0% 50%' },
         { backgroundPosition: '100% 50%', duration: 4, ease: 'none', repeat: -1, yoyo: true }
       );
     });
-    toggle.addEventListener('pointerleave', () => {
-      gsap.to(preview, { opacity: 0, scale: 0.85, duration: 0.28, ease: 'power2.in' });
-    });
+    toggle.addEventListener('pointerleave', hidePreview);
   });
 }
 
@@ -536,7 +551,7 @@ run('marquee', () => initMarquee(lenis));
 run('cursor', initCursor);
 run('magnetic', initMagnetic);
 run('tilt', initTilt);
-run('work', initWork);
+run('work', () => initWork(lenis));
 run('copy', initCopy);
 run('year', initYear);
 
