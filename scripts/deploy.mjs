@@ -1,7 +1,7 @@
 /**
  * Publishes dist/ to the gh-pages branch.
  *
- * Interim solution: the Actions workflow in .github/ is the better path, but it
+ * Interim solution. The Actions workflow in .github/ is the better path, but it
  * needs the `workflow` OAuth scope. Once `gh auth refresh -s workflow` has been
  * run and .github/ is committed, this script can go.
  */
@@ -16,7 +16,7 @@ const run = (args, cwd) =>
   execFileSync('git', args, { cwd, stdio: 'inherit' });
 
 if (!existsSync(dist)) {
-  console.error('dist/ not found — run `npm run build` first.');
+  console.error('dist/ not found. Run `npm run build` first.');
   process.exit(1);
 }
 

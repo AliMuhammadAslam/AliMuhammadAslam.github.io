@@ -1,7 +1,7 @@
 /**
  * Hero background: a single full-screen fragment shader.
  * Flowing fbm noise field, faintly reactive to the pointer.
- * Deliberately low-contrast — it sits behind type and must never fight it.
+ * Deliberately low-contrast, since it sits behind type and must never fight it.
  */
 
 const VERT = `
@@ -49,7 +49,7 @@ void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / min(uRes.x, uRes.y);
   float t = uTime * 0.035;
 
-  // domain warp — gives the field its slow, liquid drift
+  // domain warp, which gives the field its slow liquid drift
   vec2 q = vec2(fbm(uv * 1.6 + t), fbm(uv * 1.6 + vec2(3.2, 1.7) - t));
   vec2 r = vec2(
     fbm(uv * 2.1 + 3.0 * q + vec2(1.7, 9.2) + 0.15 * t),
@@ -62,14 +62,18 @@ void main() {
   float dist = length(uv - m);
   float halo = smoothstep(0.85, 0.0, dist) * 0.34;
 
-  float field = smoothstep(0.18, 0.92, f) + halo;
+  float field = smoothstep(0.16, 0.94, f) + halo;
 
-  vec3 base   = mix(vec3(0.027, 0.035, 0.043), vec3(0.949, 0.945, 0.925), uLight);
-  vec3 mid    = mix(vec3(0.055, 0.086, 0.078), vec3(0.878, 0.886, 0.851), uLight);
-  vec3 accent = mix(vec3(0.722, 1.000, 0.235), vec3(0.310, 0.478, 0.020), uLight);
+  vec3 base   = mix(vec3(0.039, 0.031, 0.071), vec3(1.000, 0.992, 0.984), uLight);
+  vec3 mid    = mix(vec3(0.118, 0.071, 0.180), vec3(0.988, 0.933, 0.898), uLight);
+  vec3 warm   = mix(vec3(1.000, 0.361, 0.208), vec3(0.941, 0.290, 0.090), uLight);
+  vec3 amber  = mix(vec3(1.000, 0.690, 0.125), vec3(0.851, 0.522, 0.000), uLight);
 
   vec3 col = mix(base, mid, field);
-  col = mix(col, accent, pow(field, 3.6) * mix(0.30, 0.16, uLight));
+  // Two accent passes: violet-leaning mid tones lift into coral, then the
+  // brightest crests tip toward amber. Keeps the field from reading flat.
+  col = mix(col, warm,  pow(field, 2.8) * mix(0.42, 0.26, uLight));
+  col = mix(col, amber, pow(field, 6.5) * mix(0.34, 0.20, uLight));
 
   // vignette so the edges fall away into the page background
   float vig = smoothstep(1.35, 0.25, length(uv * vec2(uRes.x / uRes.y, 1.0)));
@@ -125,7 +129,7 @@ export function initGL(canvas: HTMLCanvasElement) {
   const uMouse = gl.getUniformLocation(prog, 'uMouse');
   const uLight = gl.getUniformLocation(prog, 'uLight');
 
-  // Cap at 1.5x DPR — the field is low-frequency, so full retina buys nothing
+  // Cap at 1.5x DPR. The field is low-frequency, so full retina buys nothing
   // but costs a lot of fill rate on high-density laptop panels.
   const dpr = () => Math.min(window.devicePixelRatio || 1, 1.5);
 
@@ -154,7 +158,7 @@ export function initGL(canvas: HTMLCanvasElement) {
     { passive: true }
   );
 
-  // Pause when the hero scrolls out of view — no point burning GPU on
+  // Pause when the hero scrolls out of view. No point burning GPU on
   // a canvas nobody can see.
   let visible = true;
   new IntersectionObserver(

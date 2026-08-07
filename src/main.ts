@@ -313,10 +313,12 @@ function initMagnetic() {
 }
 
 /* ── work list: expand + cursor-following preview ─────────────── */
+// Gradient stops per project, kept inside the coral/amber/violet family so the
+// previews read as one set rather than ten unrelated swatches.
 const PREVIEW_HUES: Record<string, [number, number]> = {
-  c1: [96, 148], c2: [168, 208], c3: [42, 96], c4: [286, 336],
-  p1: [130, 178], p2: [16, 58], p3: [340, 12], p4: [258, 302],
-  p5: [188, 232], p6: [58, 104],
+  c1: [14, 38],  c2: [280, 330], c3: [34, 52],  c4: [350, 18],
+  p1: [8, 30],   p2: [40, 20],   p3: [352, 8],  p4: [268, 315],
+  p5: [300, 355], p6: [28, 46],
 };
 
 function initWork() {
@@ -361,9 +363,9 @@ function initWork() {
 
     item.addEventListener('pointerenter', () => {
       const key = item.dataset.preview ?? 'c1';
-      const [a, b] = PREVIEW_HUES[key] ?? [96, 148];
+      const [a, b] = PREVIEW_HUES[key] ?? [14, 38];
       inner.style.background =
-        `linear-gradient(135deg, hsl(${a} 72% 22%), hsl(${b} 84% 46%))`;
+        `linear-gradient(135deg, hsl(${a} 78% 32%), hsl(${b} 92% 58%))`;
       preview!.classList.add('is-on');
     });
     item.addEventListener('pointerleave', () => preview!.classList.remove('is-on'));
@@ -439,5 +441,5 @@ initWork();
 initGlowCards();
 initClock();
 
-// Fonts land after first paint and change metrics — recalculate positions.
+// Fonts land after first paint and change metrics, so recalculate positions.
 document.fonts?.ready.then(() => ScrollTrigger.refresh());
