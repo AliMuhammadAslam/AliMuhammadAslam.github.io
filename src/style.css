@@ -47,27 +47,30 @@
 [data-accent='amber']  { --sa: #ffb020; --sa-2: #ff5c35; --sa-ink: #ffc456; --sa-glow: rgba(255, 176, 32, .24); }
 [data-accent='cyan']   { --sa: #22d3ee; --sa-2: #818cf8; --sa-ink: #4fdcf1; --sa-glow: rgba(34, 211, 238, .22); }
 
+/* Cool neutral greys, not beige. Warm off-white reads as aged paper next to a
+   saturated coral; a near-neutral base lets the accent stay the only warm thing
+   on screen, which is what makes it look deliberate rather than dusty. */
 :root[data-theme='light'] {
-  --accent:     #ef4a17;
-  --accent-ink: #bd340a;
-  --accent-2:   #cf7c00;
+  --accent:     #e8451a;
+  --accent-ink: #bf3309;
+  --accent-2:   #b06f00;
   --accent-3:   #7c3aed;
   --accent-4:   #0e7490;
 
-  --bg:        #fffdfb;
-  --bg-2:      #fdf3ec;
-  --bg-3:      #f8e7db;
-  --surface:   rgba(239, 74, 23, .055);
-  --line:      rgba(46, 22, 14, .16);
-  --line-soft: rgba(46, 22, 14, .085);
-  --ink:       #170f0b;
-  --ink-2:     #54483f;
-  --ink-3:     #87766b;
+  --bg:        #fbfbfc;
+  --bg-2:      #f3f4f7;
+  --bg-3:      #e9ebef;
+  --surface:   rgba(18, 22, 33, .04);
+  --line:      rgba(18, 22, 33, .13);
+  --line-soft: rgba(18, 22, 33, .07);
+  --ink:       #0e1116;
+  --ink-2:     #494f5a;
+  --ink-3:     #7f8794;
 }
-:root[data-theme='light'] [data-accent='coral']  { --sa: #ef4a17; --sa-2: #cf7c00; --sa-ink: #bd340a; --sa-glow: rgba(239, 74, 23, .18); }
-:root[data-theme='light'] [data-accent='violet'] { --sa: #7c3aed; --sa-2: #db2777; --sa-ink: #6d28d9; --sa-glow: rgba(124, 58, 237, .16); }
-:root[data-theme='light'] [data-accent='amber']  { --sa: #cf7c00; --sa-2: #ef4a17; --sa-ink: #9a5b00; --sa-glow: rgba(207, 124, 0, .18); }
-:root[data-theme='light'] [data-accent='cyan']   { --sa: #0e7490; --sa-2: #4f46e5; --sa-ink: #0b5c72; --sa-glow: rgba(14, 116, 144, .16); }
+:root[data-theme='light'] [data-accent='coral']  { --sa: #e8451a; --sa-2: #b06f00; --sa-ink: #bf3309; --sa-glow: rgba(232, 69, 26, .14); }
+:root[data-theme='light'] [data-accent='violet'] { --sa: #7c3aed; --sa-2: #db2777; --sa-ink: #6d28d9; --sa-glow: rgba(124, 58, 237, .13); }
+:root[data-theme='light'] [data-accent='amber']  { --sa: #b06f00; --sa-2: #e8451a; --sa-ink: #8a5600; --sa-glow: rgba(176, 111, 0, .14); }
+:root[data-theme='light'] [data-accent='cyan']   { --sa: #0e7490; --sa-2: #4f46e5; --sa-ink: #0b5c72; --sa-glow: rgba(14, 116, 144, .13); }
 
 /* ── reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -392,14 +395,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .lede .w.on { opacity: 1; }
 
 /* ── stats ─────────────────────────────────────────────────── */
+/* Explicit column counts, not auto-fit. The 1px gap technique paints the
+   container colour through any unfilled cell, so the track count must always
+   divide the item count exactly (4 stats: 4, 2 or 1 across). */
 .stats {
   display: grid; gap: 1px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: clamp(3rem, 8vh, 5.5rem);
   background: var(--line-soft);
   border: 1px solid var(--line-soft);
   border-radius: 16px; overflow: hidden;
 }
+@media (max-width: 1040px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 540px)  { .stats { grid-template-columns: minmax(0, 1fr); } }
 .stat { position: relative; background: var(--bg); padding: clamp(1.4rem, 3vw, 2.2rem); transition: background .4s var(--ease); }
 .stat::after {
   content: ''; position: absolute; left: 0; top: 0; height: 2px; width: 100%;
@@ -632,18 +640,29 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: -.02em; line-height: 1.25;
   font-variation-settings: 'wdth' 95;
 }
+.tl__tag {
+  display: inline-block; vertical-align: middle;
+  margin-left: .55rem; padding: .16rem .55rem;
+  border-radius: 100px;
+  background: var(--grad-sa); color: #fff;
+  font-family: var(--font-mono); font-size: .56rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+}
 .tl__org { font-family: var(--font-mono); font-size: .74rem; color: var(--sa-ink); margin: .3rem 0 .8rem; }
 .tl__what p { color: var(--ink-2); font-size: .92rem; max-width: 66ch; }
 @media (max-width: 720px) { .tl { grid-template-columns: 1fr; gap: 1rem; } }
 
 /* ── stack ─────────────────────────────────────────────────── */
+/* Six groups, so 3 / 2 / 1 columns all divide evenly and never leave a hole. */
 .stack {
   display: grid; gap: 1px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   background: var(--line-soft);
   border: 1px solid var(--line-soft);
   border-radius: 16px; overflow: hidden;
 }
+@media (max-width: 1040px) { .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px)  { .stack { grid-template-columns: minmax(0, 1fr); } }
 .stack__group { background: var(--bg); padding: clamp(1.4rem, 3vw, 2rem); transition: background .4s var(--ease); }
 .stack__group:hover { background: var(--bg-2); }
 .stack__group h3 {

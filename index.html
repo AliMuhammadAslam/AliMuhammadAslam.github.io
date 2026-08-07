@@ -31,8 +31,10 @@
     var r = document.documentElement;
     r.classList.add('js');
     try {
-      var t = localStorage.getItem('theme');
-      r.dataset.theme = t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      /* Dark by default regardless of system preference: the hero shader and
+         accent glows are designed for it. Light stays available via the toggle
+         and is remembered once chosen. */
+      r.dataset.theme = localStorage.getItem('theme') || 'dark';
     } catch (e) { r.dataset.theme = 'dark'; }
 
     setTimeout(function () {
@@ -109,7 +111,7 @@
         security hardening to live users.
       </p>
       <dl class="hero__spec" data-anim="fade" data-delay="0.16">
-        <div><dt>Now</dt><dd>Ten Pearls (Pvt.) Ltd.</dd></div>
+        <div><dt>Now</dt><dd>Software Consultant, Ten Pearls</dd></div>
         <div><dt>Focus</dt><dd>LLM · RAG · Agents · Voice</dd></div>
         <div><dt>Merged</dt><dd>Google ADK · LangChain</dd></div>
       </dl>
@@ -453,11 +455,22 @@
     <span class="timeline__rail" aria-hidden="true"><i id="rail-fill"></i></span>
 
     <article class="tl" data-anim="rise">
-      <div class="tl__when"><span>Oct 2025</span><em>Present</em></div>
+      <div class="tl__when"><span>Jul 2026</span><em>Present</em></div>
+      <div class="tl__what">
+        <h3>Software Consultant, Full-Stack AI Engineer <span class="tl__tag">Promotion</span></h3>
+        <p class="tl__org">Ten Pearls (Pvt.) Ltd.</p>
+        <p>Promoted from Associate. Leading retrieval architecture and production
+        readiness across client AI platforms, from pipeline design through security
+        hardening to live release.</p>
+      </div>
+    </article>
+
+    <article class="tl" data-anim="rise">
+      <div class="tl__when"><span>Oct 2025</span><em>Jul 2026</em></div>
       <div class="tl__what">
         <h3>Associate Software Consultant, Full-Stack AI Engineer</h3>
         <p class="tl__org">Ten Pearls (Pvt.) Ltd.</p>
-        <p>Delivering production LLM and RAG systems plus full-stack AI applications
+        <p>Delivered production LLM and RAG systems plus full-stack AI applications
         across four client projects in healthcare, pharma and enterprise IT support,
         covering retrieval pipeline design, security hardening and cross-team delivery.</p>
       </div>
