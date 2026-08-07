@@ -392,25 +392,8 @@ function initGlowCards() {
   });
 }
 
-/* ── Karachi clock ────────────────────────────────────────────── */
-function initClock() {
-  const targets = [$('#clock'), $('#clock2')].filter(Boolean) as HTMLElement[];
-  if (!targets.length) return;
-
-  const fmt = new Intl.DateTimeFormat('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Asia/Karachi',
-  });
-
-  const tick = () => {
-    const now = fmt.format(new Date());
-    targets.forEach((t) => (t.textContent = now));
-  };
-  tick();
-  setInterval(tick, 15_000);
-
+/* ── footer year ──────────────────────────────────────────────── */
+function initYear() {
   const year = $('#year');
   if (year) year.textContent = String(new Date().getFullYear());
 }
@@ -439,7 +422,7 @@ initCursor();
 initMagnetic();
 initWork();
 initGlowCards();
-initClock();
+initYear();
 
 // Fonts land after first paint and change metrics, so recalculate positions.
 document.fonts?.ready.then(() => ScrollTrigger.refresh());
