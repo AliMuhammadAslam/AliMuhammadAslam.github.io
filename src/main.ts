@@ -86,6 +86,44 @@ function initAnchors(lenis: Lenis | null) {
   $('#totop')?.addEventListener('click', scrollToTop);
 }
 
+/* ── mobile menu ──────────────────────────────────────────────── */
+function initMenu(lenis: Lenis | null) {
+  const nav = $('#nav');
+  const btn = $<HTMLButtonElement>('#nav-menu');
+  const links = $('#nav-links');
+  if (!nav || !btn || !links) return;
+  const narrow = window.matchMedia('(max-width: 900px)');
+
+  const set = (open: boolean, returnFocus = false) => {
+    if (nav.classList.contains('is-open') === open) return;
+    nav.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    // Lenis doesn't stop native touch scrolling, so lock the root too.
+    if (open) lenis?.stop(); else lenis?.start();
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (returnFocus) btn.focus();
+  };
+
+  btn.addEventListener('click', () => set(!nav.classList.contains('is-open')));
+
+  // Capture phase: Lenis must be running again before the anchor handler scrolls.
+  links.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) set(false);
+  }, true);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) set(false, true);
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (nav.classList.contains('is-open') && !nav.contains(e.target as Node)) set(false);
+  });
+  nav.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget as Node | null;
+    if (next && !nav.contains(next)) set(false);
+  });
+  narrow.addEventListener('change', () => { if (!narrow.matches) set(false); });
+}
+
 /* ── split text into animatable characters ────────────────────── */
 function split(el: HTMLElement) {
   const words = (el.textContent ?? '').trim().split(/\s+/);
@@ -540,6 +578,7 @@ const lenis = initScroll();
 
 run('theme', initTheme);
 run('anchors', () => initAnchors(lenis));
+run('menu', () => initMenu(lenis));
 run('gl', () => {
   const canvas = $<HTMLCanvasElement>('#gl');
   if (canvas && !reduced) initGL(canvas);

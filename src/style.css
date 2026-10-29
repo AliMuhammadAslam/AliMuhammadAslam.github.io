@@ -227,7 +227,54 @@ main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
 :root[data-theme='light'] .icon-sun  { display: block; }
 :root[data-theme='light'] .icon-moon { display: none; }
 
-@media (max-width: 900px) { .nav__links, .nav__mark-text { display: none; } }
+.nav__tools { display: flex; align-items: center; gap: .5rem; }
+.nav__menu { display: none; }
+html:not(.js) .nav__menu, .boot-failed .nav__menu { display: none !important; }
+
+/* Mobile menu. Height stays auto: the stuck nav's backdrop-filter makes it
+   the containing block, so 100vh wouldn't work. */
+@media (max-width: 900px) {
+  .nav__mark-text { display: none; }
+  .nav.is-open { background: var(--bg); border-bottom-color: var(--line-soft); }
+
+  .nav__menu {
+    width: 34px; height: 34px; flex: none;
+    display: grid; place-content: center; gap: 4px;
+    border: 1px solid var(--line); border-radius: 50%; color: var(--ink-2);
+    transition: color .3s, border-color .3s, background .3s;
+  }
+  .nav__menu span {
+    display: block; width: 14px; height: 1.5px; border-radius: 2px;
+    background: currentColor;
+    transition: transform .4s var(--ease);
+  }
+  .nav__menu:hover, .nav.is-open .nav__menu { color: var(--accent-ink); border-color: var(--accent); background: var(--surface); }
+  .nav.is-open .nav__menu span:first-child { transform: translateY(2.75px) rotate(45deg); }
+  .nav.is-open .nav__menu span:last-child  { transform: translateY(-2.75px) rotate(-45deg); }
+
+  .nav__links {
+    position: fixed; top: 0; left: 0; right: 0; z-index: -1;
+    flex-direction: column; gap: 0;
+    padding: 4.4rem var(--pad) 1.25rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55);
+    transform: translateY(-100%); visibility: hidden;
+    /* delay visibility until the slide-out finishes */
+    transition: transform .5s var(--ease), visibility 0s linear .5s;
+  }
+  .nav.is-open .nav__links { transform: none; visibility: visible; transition: transform .5s var(--ease), visibility 0s; }
+  .nav__links a {
+    padding: .95rem 0; border-radius: 0;
+    font-family: var(--font-display); font-size: 1.3rem; font-weight: 600;
+    letter-spacing: -.02em; color: var(--ink);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav__links a:last-child { border-bottom: 0; }
+  .nav__links a::before { display: none; }
+  .nav__links a span { font-size: .7rem; font-weight: 400; letter-spacing: 0; }
+  .nav__links a.is-active { color: var(--accent-ink); }
+}
 
 /* ── hero ──────────────────────────────────────────────────── */
 .hero {
