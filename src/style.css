@@ -35,9 +35,9 @@
   --sa-ink: var(--accent-ink);
   --sa-glow: rgba(255, 92, 53, .26);
 
-  --font-display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
-  --font-ui:      'Instrument Sans', system-ui, -apple-system, sans-serif;
-  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Bricolage Grotesque Variable', 'Instrument Sans Variable', system-ui, sans-serif;
+  --font-ui:      'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono Variable', ui-monospace, monospace;
 
   --pad: clamp(1.25rem, 5vw, 6rem);
   --max: 1440px;

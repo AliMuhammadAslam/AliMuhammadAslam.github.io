@@ -1,3 +1,6 @@
+import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource-variable/instrument-sans';
+import '@fontsource-variable/jetbrains-mono';
 import './style.css';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
