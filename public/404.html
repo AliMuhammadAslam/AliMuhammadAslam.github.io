@@ -15,12 +15,12 @@
 </script>
 <style>
   :root {
-    --accent: #ff5c35; --accent-2: #ffb020; --accent-ink: #ff7a52;
+    --accent: #ff5c35; --accent-2: #ffb020; --accent-ink: #ff7a52; --on-accent: #0d0b15;
     --bg: #0d0b15; --ink: #fdf8f6; --ink-2: #c0b3b6; --ink-3: #968890;
     --line: rgba(255, 195, 172, .15);
   }
   :root[data-theme='light'] {
-    --accent: #e8451a; --accent-2: #b06f00; --accent-ink: #bf3309;
+    --accent: #d03b10; --accent-2: #9c6200; --accent-ink: #bf3309; --on-accent: #fff;
     --bg: #fbfbfc; --ink: #0e1116; --ink-2: #494f5a; --ink-3: #646b78;
     --line: rgba(18, 22, 33, .13);
   }
@@ -49,7 +49,7 @@
     display: inline-flex; align-items: center; gap: .5rem;
     margin-top: .5rem; padding: .78rem 1.4rem; border-radius: 100px;
     background: linear-gradient(120deg, var(--accent), var(--accent-2));
-    color: #fff; font-size: .9rem; font-weight: 500; text-decoration: none;
+    color: var(--on-accent); font-size: .9rem; font-weight: 500; text-decoration: none;
   }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 </style>

@@ -12,6 +12,8 @@
   --accent-2:   #ffb020;
   --accent-3:   #a855f7;
   --accent-4:   #22d3ee;
+  /* text on accent fills */
+  --on-accent:  #0d0b15;
 
   /* Lifted off true black. Near-black flattens: every surface collapses into
      the background and the page reads heavy. A few points up gives the cards
@@ -33,9 +35,6 @@
   --sa-ink: var(--accent-ink);
   --sa-glow: rgba(255, 92, 53, .26);
 
-  --grad:      linear-gradient(100deg, var(--sa) 0%, var(--sa-2) 60%, var(--accent-3) 115%);
-  --grad-sa:   linear-gradient(120deg, var(--sa), var(--sa-2));
-
   --font-display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
   --font-ui:      'Instrument Sans', system-ui, -apple-system, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, monospace;
@@ -50,15 +49,23 @@
 [data-accent='amber']  { --sa: #ffb020; --sa-2: #ff5c35; --sa-ink: #ffc456; --sa-glow: rgba(255, 176, 32, .24); }
 [data-accent='cyan']   { --sa: #22d3ee; --sa-2: #818cf8; --sa-ink: #4fdcf1; --sa-glow: rgba(34, 211, 238, .22); }
 
+/* Gradients have to be redeclared per section, otherwise they resolve once
+   on :root and always use the coral --sa. */
+:root, [data-accent] {
+  --grad:    linear-gradient(100deg, var(--sa) 0%, var(--sa-2) 60%, var(--accent-3) 115%);
+  --grad-sa: linear-gradient(120deg, var(--sa), var(--sa-2));
+}
+
 /* Cool neutral greys, not beige. Warm off-white reads as aged paper next to a
    saturated coral; a near-neutral base lets the accent stay the only warm thing
    on screen, which is what makes it look deliberate rather than dusty. */
 :root[data-theme='light'] {
-  --accent:     #e8451a;
+  --accent:     #d03b10;
   --accent-ink: #bf3309;
-  --accent-2:   #b06f00;
+  --accent-2:   #9c6200;
   --accent-3:   #7c3aed;
   --accent-4:   #0e7490;
+  --on-accent:  #fff;
 
   --bg:        #fbfbfc;
   --bg-2:      #f3f4f7;
@@ -70,9 +77,9 @@
   --ink-2:     #494f5a;
   --ink-3:     #646b78;
 }
-:root[data-theme='light'] [data-accent='coral']  { --sa: #e8451a; --sa-2: #b06f00; --sa-ink: #bf3309; --sa-glow: rgba(232, 69, 26, .14); }
+:root[data-theme='light'] [data-accent='coral']  { --sa: #d03b10; --sa-2: #9c6200; --sa-ink: #bf3309; --sa-glow: rgba(232, 69, 26, .14); }
 :root[data-theme='light'] [data-accent='violet'] { --sa: #7c3aed; --sa-2: #db2777; --sa-ink: #6d28d9; --sa-glow: rgba(124, 58, 237, .13); }
-:root[data-theme='light'] [data-accent='amber']  { --sa: #b06f00; --sa-2: #e8451a; --sa-ink: #8a5600; --sa-glow: rgba(176, 111, 0, .14); }
+:root[data-theme='light'] [data-accent='amber']  { --sa: #9c6200; --sa-2: #d03b10; --sa-ink: #8a5600; --sa-glow: rgba(176, 111, 0, .14); }
 :root[data-theme='light'] [data-accent='cyan']   { --sa: #0e7490; --sa-2: #4f46e5; --sa-ink: #0b5c72; --sa-glow: rgba(14, 116, 144, .13); }
 
 /* ── reset ─────────────────────────────────────────────────── */
@@ -99,7 +106,7 @@ ul { list-style: none; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
 
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--on-accent); }
 :focus-visible { outline: 2px solid var(--sa); outline-offset: 3px; border-radius: 3px; }
 /* Sections get focus after anchor jumps; no outline needed. */
 main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
@@ -107,7 +114,7 @@ main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
 .skip {
   position: fixed; top: -100px; left: var(--pad); z-index: 300;
   padding: .7rem 1.2rem; border-radius: 0 0 10px 10px;
-  background: var(--accent); color: #fff; font-size: .85rem;
+  background: var(--accent); color: var(--on-accent); font-size: .85rem;
   transition: top .3s var(--ease);
 }
 .skip:focus { top: 0; }
@@ -382,16 +389,16 @@ html:not(.js) .nav__menu, .boot-failed .nav__menu { display: none !important; }
   transition: transform .5s var(--ease);
 }
 .btn:hover::before { transform: translateY(0); }
-.btn:hover { color: #fff; border-color: transparent; }
+.btn:hover { color: var(--on-accent); border-color: transparent; }
 .btn:hover svg { transform: translateY(3px); }
 .btn--primary {
   background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  color: #fff; border-color: transparent;
+  color: var(--on-accent); border-color: transparent;
   box-shadow: 0 6px 26px rgba(255, 92, 53, .3);
 }
 .btn--primary::before { background: transparent; }
 .btn--primary:hover { box-shadow: 0 12px 44px rgba(255, 92, 53, .42); }
-.btn.is-copied { color: #fff; border-color: transparent; }
+.btn.is-copied { color: var(--on-accent); border-color: transparent; }
 .btn.is-copied::before { transform: translateY(0); }
 
 /* ── marquee ───────────────────────────────────────────────── */
@@ -634,7 +641,7 @@ html:not(.js) .work__chev { display: none; }
   margin-left: auto; flex: none;
   font-family: var(--font-mono); font-size: .66rem;
   letter-spacing: .12em; text-transform: uppercase;
-  color: #fff; background: var(--grad-sa);
+  color: var(--on-accent); background: var(--grad-sa);
   padding: .3rem .65rem; border-radius: 100px;
 }
 .oss__msg {
@@ -705,7 +712,7 @@ html:not(.js) .work__chev { display: none; }
   display: inline-block; vertical-align: middle;
   margin-left: .55rem; padding: .16rem .55rem;
   border-radius: 100px;
-  background: var(--grad-sa); color: #fff;
+  background: var(--grad-sa); color: var(--on-accent);
   font-family: var(--font-mono); font-size: .64rem; font-weight: 500;
   letter-spacing: .12em; text-transform: uppercase;
 }
@@ -739,10 +746,9 @@ html:not(.js) .work__chev { display: none; }
   transition: color .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease);
 }
 .stack__group li:hover {
-  color: #fff; background: var(--grad-sa);
+  color: var(--on-accent); background: var(--grad-sa);
   border-color: transparent; transform: translateY(-2px);
 }
-:root[data-theme='light'] .stack__group li:hover { color: #fff; }
 
 .creds { display: grid; gap: clamp(2rem, 5vw, 4rem); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: clamp(3rem, 8vh, 5rem); }
 .cred h3 {
