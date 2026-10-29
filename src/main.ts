@@ -162,11 +162,14 @@ function initIntro() {
     });
   };
 
-  if (reduced || !pre) {
+  // .no-intro is set by the head script on repeat visits.
+  const seen = document.documentElement.classList.contains('no-intro');
+  if (reduced || seen || !pre) {
     pre?.remove();
     finish();
     return;
   }
+  try { sessionStorage.setItem('intro-seen', '1'); } catch { /* private mode */ }
 
   const count = $('#preloader-count');
   const fill = $('#preloader-fill');
@@ -177,7 +180,7 @@ function initIntro() {
   gsap.timeline()
     .to(n, {
       v: 100,
-      duration: 1.1,
+      duration: 0.8,
       ease: 'power2.inOut',
       onUpdate: () => {
         const v = Math.round(n.v);
@@ -375,11 +378,24 @@ function initMarquee(lenis: Lenis | null) {
   // The tween travels -50%, so the two halves must be identical or the loop
   // visibly jumps. Appending copies one at a time can leave an odd count.
   const unit = track.innerHTML;
-  let guard = 0;
-  while (track.scrollWidth < window.innerWidth * 1.5 && guard++ < 12) {
-    track.innerHTML += unit;
-  }
-  track.innerHTML += track.innerHTML;
+  const fill = () => {
+    track.innerHTML = unit;
+    let guard = 0;
+    while (track.scrollWidth < window.innerWidth * 1.5 && guard++ < 12) {
+      track.innerHTML += unit;
+    }
+    track.innerHTML += track.innerHTML;
+  };
+  fill();
+
+  // Refill if the window grows wider than the strip.
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      if (track.scrollWidth / 2 < window.innerWidth * 1.5) fill();
+    }, 200);
+  }, { passive: true });
 
   const tween = gsap.to(track, { xPercent: -50, duration: 34, ease: 'none', repeat: -1 });
 

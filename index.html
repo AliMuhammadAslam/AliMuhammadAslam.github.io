@@ -26,10 +26,12 @@
         load or throws, the page still renders as readable static content
         instead of a blank screen.
      2. Theme is resolved here to avoid a light/dark flash on load.
-     3. The failsafe clears the preloader if boot never finishes. */
+     3. The preloader only plays on the first visit in a session.
+     4. The failsafe clears the preloader if boot never finishes. */
   (function () {
     var r = document.documentElement;
     r.classList.add('js');
+    try { if (sessionStorage.getItem('intro-seen')) r.classList.add('no-intro'); } catch (e) {}
     try {
       /* Dark by default regardless of system preference: the hero shader and
          accent glows are designed for it. Light stays available via the toggle

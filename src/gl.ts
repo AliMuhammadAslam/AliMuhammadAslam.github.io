@@ -95,6 +95,41 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
   return sh;
 }
 
+type Uniforms = {
+  uRes: WebGLUniformLocation | null;
+  uTime: WebGLUniformLocation | null;
+  uMouse: WebGLUniformLocation | null;
+  uLight: WebGLUniformLocation | null;
+};
+
+/* Also re-run after a context restore. */
+function setup(gl: WebGLRenderingContext): Uniforms | null {
+  const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+  const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+  if (!vs || !fs) return null;
+
+  const prog = gl.createProgram()!;
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(prog, 'aPos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  return {
+    uRes: gl.getUniformLocation(prog, 'uRes'),
+    uTime: gl.getUniformLocation(prog, 'uTime'),
+    uMouse: gl.getUniformLocation(prog, 'uMouse'),
+    uLight: gl.getUniformLocation(prog, 'uLight'),
+  };
+}
+
 export function initGL(canvas: HTMLCanvasElement) {
   const gl = canvas.getContext('webgl', {
     antialias: false,
@@ -106,28 +141,8 @@ export function initGL(canvas: HTMLCanvasElement) {
     return;
   }
 
-  const vs = compile(gl, gl.VERTEX_SHADER, VERT);
-  const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
-  if (!vs || !fs) return;
-
-  const prog = gl.createProgram()!;
-  gl.attachShader(prog, vs);
-  gl.attachShader(prog, fs);
-  gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-  gl.useProgram(prog);
-
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'aPos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const uRes = gl.getUniformLocation(prog, 'uRes');
-  const uTime = gl.getUniformLocation(prog, 'uTime');
-  const uMouse = gl.getUniformLocation(prog, 'uMouse');
-  const uLight = gl.getUniformLocation(prog, 'uLight');
+  let u = setup(gl);
+  if (!u) return;
 
   // Cap at 1.5x DPR. The field is low-frequency, so full retina buys nothing
   // but costs a lot of fill rate on high-density laptop panels.
@@ -146,6 +161,8 @@ export function initGL(canvas: HTMLCanvasElement) {
     }
   }
   resize();
+  // resize event still needed for DPR changes
+  new ResizeObserver(resize).observe(canvas);
   window.addEventListener('resize', resize, { passive: true });
 
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
@@ -158,34 +175,61 @@ export function initGL(canvas: HTMLCanvasElement) {
     { passive: true }
   );
 
-  // Pause when the hero scrolls out of view. No point burning GPU on
-  // a canvas nobody can see.
+  // Only run while the hero is visible and the context is alive.
   let visible = true;
-  new IntersectionObserver(
-    ([entry]) => { visible = entry.isIntersecting; },
-    { threshold: 0 }
-  ).observe(canvas);
-
-  const start = performance.now();
+  let lost = false;
+  let running = false;
   let raf = 0;
+  const start = performance.now();
 
   function frame(now: number) {
+    if (!running || !u) return;
     raf = requestAnimationFrame(frame);
-    if (!visible || document.hidden) return;
 
-    resize();
     mouse.x += (mouse.tx - mouse.x) * 0.06;
     mouse.y += (mouse.ty - mouse.y) * 0.06;
 
     const light = document.documentElement.dataset.theme === 'light' ? 1 : 0;
 
-    gl!.uniform2f(uRes, w, h);
-    gl!.uniform1f(uTime, (now - start) / 1000);
-    gl!.uniform2f(uMouse, mouse.x, mouse.y);
-    gl!.uniform1f(uLight, light);
+    gl!.uniform2f(u.uRes, w, h);
+    gl!.uniform1f(u.uTime, (now - start) / 1000);
+    gl!.uniform2f(u.uMouse, mouse.x, mouse.y);
+    gl!.uniform1f(u.uLight, light);
     gl!.drawArrays(gl!.TRIANGLES, 0, 3);
   }
-  raf = requestAnimationFrame(frame);
 
-  return () => cancelAnimationFrame(raf);
+  function update() {
+    const should = visible && !document.hidden && !lost;
+    if (should && !running) {
+      running = true;
+      raf = requestAnimationFrame(frame);
+    } else if (!should && running) {
+      running = false;
+      cancelAnimationFrame(raf);
+    }
+  }
+
+  new IntersectionObserver(
+    ([entry]) => { visible = entry.isIntersecting; update(); },
+    { threshold: 0 }
+  ).observe(canvas);
+  document.addEventListener('visibilitychange', update);
+
+  // preventDefault is required for the context to be restored.
+  canvas.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    lost = true;
+    canvas.style.visibility = 'hidden';
+    update();
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    u = setup(gl);
+    if (!u) return;
+    lost = false;
+    canvas.style.visibility = '';
+    update();
+  });
+
+  update();
+  return () => { running = false; cancelAnimationFrame(raf); };
 }

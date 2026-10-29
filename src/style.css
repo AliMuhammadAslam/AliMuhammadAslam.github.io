@@ -113,7 +113,7 @@ main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
 .skip:focus { top: 0; }
 
 /* ── preloader ─────────────────────────────────────────────── */
-.preloader { display: none; }
+.preloader, .js.no-intro .preloader { display: none; }
 .js .preloader {
   position: fixed; inset: 0; z-index: 200;
   background: var(--bg);
@@ -142,6 +142,8 @@ main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
   80%     { transform: translate(5%,3%) }
 }
 :root[data-theme='light'] .grain { opacity: .18; mix-blend-mode: multiply; }
+/* Too costly on phones for how little it shows. */
+@media (hover: none), (pointer: coarse) { .grain { display: none; } }
 
 .cursor { position: fixed; top: 0; left: 0; z-index: 190; pointer-events: none; }
 .cursor__dot, .cursor__ring { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); }
