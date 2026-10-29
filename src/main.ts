@@ -1,3 +1,6 @@
+import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource-variable/instrument-sans';
+import '@fontsource-variable/jetbrains-mono';
 import './style.css';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
@@ -16,12 +19,25 @@ const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document
 /* ── theme ────────────────────────────────────────────────────── */
 /* The initial value is resolved by the inline head script to avoid a flash;
    this only wires up the toggle. */
+const THEME_COLOR = { dark: '#0d0b15', light: '#fbfbfc' } as const;
+
 function initTheme() {
   const root = document.documentElement;
-  $('#theme-toggle')?.addEventListener('click', () => {
+  const toggle = $('#theme-toggle');
+  const meta = $<HTMLMetaElement>('meta[name="theme-color"]');
+
+  const sync = () => {
+    const theme = root.dataset.theme === 'light' ? 'light' : 'dark';
+    toggle?.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
+    meta?.setAttribute('content', THEME_COLOR[theme]);
+  };
+  sync();
+
+  toggle?.addEventListener('click', () => {
     const next = root.dataset.theme === 'light' ? 'dark' : 'light';
     root.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch { /* private mode */ }
+    sync();
   });
 }
 
@@ -41,25 +57,74 @@ function initScroll(): Lenis | null {
   return lenis;
 }
 
+/* Nav offset comes from scroll-padding-top in CSS, which Lenis respects. */
 function initAnchors(lenis: Lenis | null) {
+  // preventDefault also stops the browser moving focus, so do it here.
+  const focusTarget = (el: HTMLElement) => {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+  };
+
+  const scrollToTop = () => {
+    if (lenis) lenis.scrollTo(0);
+    else window.scrollTo({ top: 0 });
+    const main = $('#top');
+    if (main) focusTarget(main);
+  };
+
   $$<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href')!;
       if (id === '#') return;
-      const target = id === '#top' ? 0 : $(id);
-      if (target === null) return;
       e.preventDefault();
-      const offset = id === '#top' ? 0 : -70;
-      if (lenis) lenis.scrollTo(target as HTMLElement | 0, { offset });
-      else if (target === 0) window.scrollTo({ top: 0 });
-      else (target as HTMLElement).scrollIntoView();
+      if (id === '#top') return scrollToTop();
+      const target = $(id);
+      if (!target) return;
+      if (lenis) lenis.scrollTo(target);
+      else target.scrollIntoView();
+      focusTarget(target);
     });
   });
 
-  $('#totop')?.addEventListener('click', () => {
-    if (lenis) lenis.scrollTo(0);
-    else window.scrollTo({ top: 0 });
+  $('#totop')?.addEventListener('click', scrollToTop);
+}
+
+/* ── mobile menu ──────────────────────────────────────────────── */
+function initMenu(lenis: Lenis | null) {
+  const nav = $('#nav');
+  const btn = $<HTMLButtonElement>('#nav-menu');
+  const links = $('#nav-links');
+  if (!nav || !btn || !links) return;
+  const narrow = window.matchMedia('(max-width: 900px)');
+
+  const set = (open: boolean, returnFocus = false) => {
+    if (nav.classList.contains('is-open') === open) return;
+    nav.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    // Lenis doesn't stop native touch scrolling, so lock the root too.
+    if (open) lenis?.stop(); else lenis?.start();
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (returnFocus) btn.focus();
+  };
+
+  btn.addEventListener('click', () => set(!nav.classList.contains('is-open')));
+
+  // Capture phase: Lenis must be running again before the anchor handler scrolls.
+  links.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) set(false);
+  }, true);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) set(false, true);
   });
+  document.addEventListener('pointerdown', (e) => {
+    if (nav.classList.contains('is-open') && !nav.contains(e.target as Node)) set(false);
+  });
+  nav.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget as Node | null;
+    if (next && !nav.contains(next)) set(false);
+  });
+  narrow.addEventListener('change', () => { if (!narrow.matches) set(false); });
 }
 
 /* ── split text into animatable characters ────────────────────── */
@@ -100,11 +165,14 @@ function initIntro() {
     });
   };
 
-  if (reduced || !pre) {
+  // .no-intro is set by the head script on repeat visits.
+  const seen = document.documentElement.classList.contains('no-intro');
+  if (reduced || seen || !pre) {
     pre?.remove();
     finish();
     return;
   }
+  try { sessionStorage.setItem('intro-seen', '1'); } catch { /* private mode */ }
 
   const count = $('#preloader-count');
   const fill = $('#preloader-fill');
@@ -115,7 +183,7 @@ function initIntro() {
   gsap.timeline()
     .to(n, {
       v: 100,
-      duration: 1.1,
+      duration: 0.8,
       ease: 'power2.inOut',
       onUpdate: () => {
         const v = Math.round(n.v);
@@ -313,11 +381,24 @@ function initMarquee(lenis: Lenis | null) {
   // The tween travels -50%, so the two halves must be identical or the loop
   // visibly jumps. Appending copies one at a time can leave an odd count.
   const unit = track.innerHTML;
-  let guard = 0;
-  while (track.scrollWidth < window.innerWidth * 1.5 && guard++ < 12) {
-    track.innerHTML += unit;
-  }
-  track.innerHTML += track.innerHTML;
+  const fill = () => {
+    track.innerHTML = unit;
+    let guard = 0;
+    while (track.scrollWidth < window.innerWidth * 1.5 && guard++ < 12) {
+      track.innerHTML += unit;
+    }
+    track.innerHTML += track.innerHTML;
+  };
+  fill();
+
+  // Refill if the window grows wider than the strip.
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      if (track.scrollWidth / 2 < window.innerWidth * 1.5) fill();
+    }, 200);
+  }, { passive: true });
 
   const tween = gsap.to(track, { xPercent: -50, duration: 34, ease: 'none', repeat: -1 });
 
@@ -414,23 +495,49 @@ function initTilt() {
    information while sitting directly on top of the title being read. The
    chevron in the row does the same job without covering anything. */
 function initWork() {
-  $$('.work').forEach((item) => {
+  // Failsafe already expanded the rows.
+  if (document.documentElement.classList.contains('boot-failed')) return;
+  const items = $$('.work');
+
+  // Refresh once the row transition ends. The timeout covers browsers that
+  // can't animate grid-template-rows.
+  let fallback = 0;
+  let pending = 0;
+  const refresh = () => {
+    window.clearTimeout(fallback);
+    window.clearTimeout(pending);
+    // closing and opening rows fire together
+    pending = window.setTimeout(() => ScrollTrigger.refresh(), 0);
+  };
+
+  const setOpen = (item: HTMLElement, open: boolean) => {
+    item.classList.toggle('is-open', open);
+    $('.work__toggle', item)?.setAttribute('aria-expanded', String(open));
+    // keep links in collapsed rows out of the tab order
+    const detail = $('.work__detail', item);
+    if (detail) detail.inert = !open;
+  };
+
+  items.forEach((item, i) => {
     const toggle = $<HTMLButtonElement>('.work__toggle', item);
-    if (!toggle) return;
+    const detail = $('.work__detail', item);
+    if (!toggle || !detail) return;
+
+    detail.id ||= `work-detail-${i + 1}`;
+    toggle.setAttribute('aria-controls', detail.id);
+    setOpen(item, false);
+
+    detail.addEventListener('transitionend', (e) => {
+      if (e.target === detail && e.propertyName === 'grid-template-rows') refresh();
+    });
 
     toggle.addEventListener('click', () => {
       const open = item.classList.contains('is-open');
       // Accordion: only one row expanded at a time.
-      $$('.work').forEach((o) => {
-        o.classList.remove('is-open');
-        $('.work__toggle', o)?.setAttribute('aria-expanded', 'false');
-      });
-      if (!open) {
-        item.classList.add('is-open');
-        toggle.setAttribute('aria-expanded', 'true');
-      }
-      // Row heights changed, so every trigger below this point has moved.
-      ScrollTrigger.refresh();
+      items.forEach((o) => setOpen(o, false));
+      if (!open) setOpen(item, true);
+      window.clearTimeout(fallback);
+      fallback = window.setTimeout(refresh, 700);
     });
   });
 }
@@ -471,6 +578,14 @@ function initCopy() {
       }, 1800);
     });
   });
+
+  // mailto does nothing without a mail app set up, so copy the address too.
+  $$<HTMLAnchorElement>('a[href^="mailto:"]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const mail = a.href.slice('mailto:'.length);
+      navigator.clipboard?.writeText(mail).then(() => flash('Email copied to clipboard'), () => {});
+    });
+  });
 }
 
 /* ── footer year ──────────────────────────────────────────────── */
@@ -490,6 +605,7 @@ const lenis = initScroll();
 
 run('theme', initTheme);
 run('anchors', () => initAnchors(lenis));
+run('menu', () => initMenu(lenis));
 run('gl', () => {
   const canvas = $<HTMLCanvasElement>('#gl');
   if (canvas && !reduced) initGL(canvas);

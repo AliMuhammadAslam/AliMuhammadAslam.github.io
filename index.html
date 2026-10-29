@@ -7,18 +7,46 @@
 <meta name="description" content="Full-stack AI engineer building production LLM and RAG systems: retrieval pipelines, agentic workflows and real-time voice AI. Contributions merged into Google ADK and LangChain." />
 <meta name="author" content="Ali Muhammad" />
 <meta name="theme-color" content="#0d0b15" />
+<link rel="canonical" href="https://alimuhammadaslam.github.io/" />
 
 <meta property="og:type" content="profile" />
+<meta property="og:site_name" content="Ali Muhammad" />
 <meta property="og:title" content="Ali Muhammad | Full-Stack AI Engineer" />
 <meta property="og:description" content="Production LLM and RAG systems: retrieval pipelines, agentic workflows and real-time voice AI." />
 <meta property="og:url" content="https://alimuhammadaslam.github.io/" />
+<meta property="og:image" content="https://alimuhammadaslam.github.io/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Ali Muhammad, Full-Stack AI Engineer" />
+<meta property="profile:first_name" content="Ali" />
+<meta property="profile:last_name" content="Muhammad" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Ali Muhammad | Full-Stack AI Engineer" />
+<meta name="twitter:description" content="Production LLM and RAG systems: retrieval pipelines, agentic workflows and real-time voice AI." />
+<meta name="twitter:image" content="https://alimuhammadaslam.github.io/og.png" />
+<meta name="twitter:image:alt" content="Ali Muhammad, Full-Stack AI Engineer" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Ali Muhammad",
+  "url": "https://alimuhammadaslam.github.io/",
+  "image": "https://alimuhammadaslam.github.io/og.png",
+  "jobTitle": "Software Consultant, Full-Stack AI Engineer",
+  "worksFor": { "@type": "Organization", "name": "Ten Pearls" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Institute of Business Administration, Karachi" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Karachi", "addressCountry": "PK" },
+  "knowsAbout": ["Large language models", "Retrieval-augmented generation", "AI agents", "Voice AI", "LangChain", "Python", "TypeScript", "AWS"],
+  "sameAs": [
+    "https://www.linkedin.com/in/alimuhammadaslam",
+    "https://github.com/AliMuhammadAslam"
+  ]
+}
+</script>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D0B15'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='monospace' font-weight='700' fill='%23FF5C35'>A</text></svg>" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <script>
   /* Runs before first paint.
@@ -26,16 +54,22 @@
         load or throws, the page still renders as readable static content
         instead of a blank screen.
      2. Theme is resolved here to avoid a light/dark flash on load.
-     3. The failsafe clears the preloader if boot never finishes. */
+     3. The preloader only plays on the first visit in a session.
+     4. The failsafe clears the preloader if boot never finishes. */
   (function () {
     var r = document.documentElement;
     r.classList.add('js');
+    try { if (sessionStorage.getItem('intro-seen')) r.classList.add('no-intro'); } catch (e) {}
     try {
       /* Dark by default regardless of system preference: the hero shader and
          accent glows are designed for it. Light stays available via the toggle
          and is remembered once chosen. */
       r.dataset.theme = localStorage.getItem('theme') || 'dark';
     } catch (e) { r.dataset.theme = 'dark'; }
+    if (r.dataset.theme === 'light') {
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', '#fbfbfc');
+    }
 
     setTimeout(function () {
       if (!r.classList.contains('is-booted')) {
@@ -55,7 +89,7 @@
   <style>[data-anim],.lede .w{opacity:1!important;transform:none!important}.preloader{display:none!important}</style>
 </noscript>
 
-<a class="skip" href="#work">Skip to content</a>
+<a class="skip" href="#top">Skip to content</a>
 
 <!-- preloader -->
 <div class="preloader" id="preloader" aria-hidden="true">
@@ -76,17 +110,22 @@
     <span class="nav__mark-glyph">A</span>
     <span class="nav__mark-text">Ali Muhammad</span>
   </a>
-  <nav class="nav__links" aria-label="Sections">
+  <nav class="nav__links" id="nav-links" aria-label="Sections">
     <a href="#work" data-cursor="link"><span>01</span> Work</a>
     <a href="#opensource" data-cursor="link"><span>02</span> Open Source</a>
     <a href="#experience" data-cursor="link"><span>03</span> Experience</a>
     <a href="#stack" data-cursor="link"><span>04</span> Stack</a>
     <a href="#contact" data-cursor="link"><span>05</span> Contact</a>
   </nav>
-  <button class="nav__theme" id="theme-toggle" data-cursor="link" aria-label="Switch colour theme">
-    <svg viewBox="0 0 24 24" class="icon-moon" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-    <svg viewBox="0 0 24 24" class="icon-sun" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M22 12h-2.6M4.6 12H2M19.07 4.93l-1.84 1.84M6.77 17.23l-1.84 1.84M19.07 19.07l-1.84-1.84M6.77 6.77 4.93 4.93"/></svg>
-  </button>
+  <div class="nav__tools">
+    <button class="nav__theme" id="theme-toggle" data-cursor="link" aria-label="Switch to light theme">
+      <svg viewBox="0 0 24 24" class="icon-moon" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      <svg viewBox="0 0 24 24" class="icon-sun" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M22 12h-2.6M4.6 12H2M19.07 4.93l-1.84 1.84M6.77 17.23l-1.84 1.84M19.07 19.07l-1.84-1.84M6.77 6.77 4.93 4.93"/></svg>
+    </button>
+    <button class="nav__menu" id="nav-menu" data-cursor="link" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+  </div>
 </header>
 
 <main id="top">
@@ -566,6 +605,7 @@
       <h3>Recognition</h3>
       <ul>
         <li><b>Google AI Fellowship</b>, selected on the Ten Pearls team <em>Initiative by Google &amp; SAP</em></li>
+        <li><b>Google AI</b>, Professional Certificate <em>Issued by Google</em></li>
         <li><b>Google Project Management</b>, Professional Certificate <em>Issued by Google</em></li>
         <li><b>CFO, IBA HR Club</b> <em>2022 to 2023</em></li>
       </ul>

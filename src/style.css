@@ -12,6 +12,8 @@
   --accent-2:   #ffb020;
   --accent-3:   #a855f7;
   --accent-4:   #22d3ee;
+  /* text on accent fills */
+  --on-accent:  #0d0b15;
 
   /* Lifted off true black. Near-black flattens: every surface collapses into
      the background and the page reads heavy. A few points up gives the cards
@@ -24,7 +26,7 @@
   --line-soft: rgba(255, 195, 172, .085);
   --ink:       #fdf8f6;
   --ink-2:     #c0b3b6;
-  --ink-3:     #8b7d85;
+  --ink-3:     #968890;
 
   /* Per-section accent. Overridden by [data-accent] blocks below so each
      section carries its own hue without needing bespoke rules. */
@@ -33,12 +35,9 @@
   --sa-ink: var(--accent-ink);
   --sa-glow: rgba(255, 92, 53, .26);
 
-  --grad:      linear-gradient(100deg, var(--sa) 0%, var(--sa-2) 60%, var(--accent-3) 115%);
-  --grad-sa:   linear-gradient(120deg, var(--sa), var(--sa-2));
-
-  --font-display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
-  --font-ui:      'Instrument Sans', system-ui, -apple-system, sans-serif;
-  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Bricolage Grotesque Variable', 'Instrument Sans Variable', system-ui, sans-serif;
+  --font-ui:      'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono Variable', ui-monospace, monospace;
 
   --pad: clamp(1.25rem, 5vw, 6rem);
   --max: 1440px;
@@ -50,15 +49,23 @@
 [data-accent='amber']  { --sa: #ffb020; --sa-2: #ff5c35; --sa-ink: #ffc456; --sa-glow: rgba(255, 176, 32, .24); }
 [data-accent='cyan']   { --sa: #22d3ee; --sa-2: #818cf8; --sa-ink: #4fdcf1; --sa-glow: rgba(34, 211, 238, .22); }
 
+/* Gradients have to be redeclared per section, otherwise they resolve once
+   on :root and always use the coral --sa. */
+:root, [data-accent] {
+  --grad:    linear-gradient(100deg, var(--sa) 0%, var(--sa-2) 60%, var(--accent-3) 115%);
+  --grad-sa: linear-gradient(120deg, var(--sa), var(--sa-2));
+}
+
 /* Cool neutral greys, not beige. Warm off-white reads as aged paper next to a
    saturated coral; a near-neutral base lets the accent stay the only warm thing
    on screen, which is what makes it look deliberate rather than dusty. */
 :root[data-theme='light'] {
-  --accent:     #e8451a;
+  --accent:     #d03b10;
   --accent-ink: #bf3309;
-  --accent-2:   #b06f00;
+  --accent-2:   #9c6200;
   --accent-3:   #7c3aed;
   --accent-4:   #0e7490;
+  --on-accent:  #fff;
 
   --bg:        #fbfbfc;
   --bg-2:      #f3f4f7;
@@ -68,17 +75,18 @@
   --line-soft: rgba(18, 22, 33, .07);
   --ink:       #0e1116;
   --ink-2:     #494f5a;
-  --ink-3:     #7f8794;
+  --ink-3:     #646b78;
 }
-:root[data-theme='light'] [data-accent='coral']  { --sa: #e8451a; --sa-2: #b06f00; --sa-ink: #bf3309; --sa-glow: rgba(232, 69, 26, .14); }
+:root[data-theme='light'] [data-accent='coral']  { --sa: #d03b10; --sa-2: #9c6200; --sa-ink: #bf3309; --sa-glow: rgba(232, 69, 26, .14); }
 :root[data-theme='light'] [data-accent='violet'] { --sa: #7c3aed; --sa-2: #db2777; --sa-ink: #6d28d9; --sa-glow: rgba(124, 58, 237, .13); }
-:root[data-theme='light'] [data-accent='amber']  { --sa: #b06f00; --sa-2: #e8451a; --sa-ink: #8a5600; --sa-glow: rgba(176, 111, 0, .14); }
+:root[data-theme='light'] [data-accent='amber']  { --sa: #9c6200; --sa-2: #d03b10; --sa-ink: #8a5600; --sa-glow: rgba(176, 111, 0, .14); }
 :root[data-theme='light'] [data-accent='cyan']   { --sa: #0e7490; --sa-2: #4f46e5; --sa-ink: #0b5c72; --sa-glow: rgba(14, 116, 144, .13); }
 
 /* ── reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+/* scroll-padding-top clears the fixed nav (Lenis uses it too). */
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 70px; }
 html.lenis { scroll-behavior: auto; }
 
 body {
@@ -98,19 +106,21 @@ ul { list-style: none; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
 
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--on-accent); }
 :focus-visible { outline: 2px solid var(--sa); outline-offset: 3px; border-radius: 3px; }
+/* Sections get focus after anchor jumps; no outline needed. */
+main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
 
 .skip {
   position: fixed; top: -100px; left: var(--pad); z-index: 300;
   padding: .7rem 1.2rem; border-radius: 0 0 10px 10px;
-  background: var(--accent); color: #fff; font-size: .85rem;
+  background: var(--accent); color: var(--on-accent); font-size: .85rem;
   transition: top .3s var(--ease);
 }
 .skip:focus { top: 0; }
 
 /* ── preloader ─────────────────────────────────────────────── */
-.preloader { display: none; }
+.preloader, .js.no-intro .preloader { display: none; }
 .js .preloader {
   position: fixed; inset: 0; z-index: 200;
   background: var(--bg);
@@ -139,6 +149,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   80%     { transform: translate(5%,3%) }
 }
 :root[data-theme='light'] .grain { opacity: .18; mix-blend-mode: multiply; }
+/* Too costly on phones for how little it shows. */
+@media (hover: none), (pointer: coarse) { .grain { display: none; } }
 
 .cursor { position: fixed; top: 0; left: 0; z-index: 190; pointer-events: none; }
 .cursor__dot, .cursor__ring { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); }
@@ -208,7 +220,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: transform .4s var(--ease), opacity .3s;
 }
 .nav__links a:hover::before, .nav__links a.is-active::before { transform: scale(1); opacity: 1; }
-.nav__links a span { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-3); transition: color .3s; }
+.nav__links a span { font-family: var(--font-mono); font-size: .66rem; color: var(--ink-3); transition: color .3s; }
 .nav__links a:hover, .nav__links a.is-active { color: var(--ink); }
 .nav__links a.is-active span { color: var(--accent-ink); }
 
@@ -224,7 +236,54 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 :root[data-theme='light'] .icon-sun  { display: block; }
 :root[data-theme='light'] .icon-moon { display: none; }
 
-@media (max-width: 900px) { .nav__links, .nav__mark-text { display: none; } }
+.nav__tools { display: flex; align-items: center; gap: .5rem; }
+.nav__menu { display: none; }
+html:not(.js) .nav__menu, .boot-failed .nav__menu { display: none !important; }
+
+/* Mobile menu. Height stays auto: the stuck nav's backdrop-filter makes it
+   the containing block, so 100vh wouldn't work. */
+@media (max-width: 900px) {
+  .nav__mark-text { display: none; }
+  .nav.is-open { background: var(--bg); border-bottom-color: var(--line-soft); }
+
+  .nav__menu {
+    width: 34px; height: 34px; flex: none;
+    display: grid; place-content: center; gap: 4px;
+    border: 1px solid var(--line); border-radius: 50%; color: var(--ink-2);
+    transition: color .3s, border-color .3s, background .3s;
+  }
+  .nav__menu span {
+    display: block; width: 14px; height: 1.5px; border-radius: 2px;
+    background: currentColor;
+    transition: transform .4s var(--ease);
+  }
+  .nav__menu:hover, .nav.is-open .nav__menu { color: var(--accent-ink); border-color: var(--accent); background: var(--surface); }
+  .nav.is-open .nav__menu span:first-child { transform: translateY(2.75px) rotate(45deg); }
+  .nav.is-open .nav__menu span:last-child  { transform: translateY(-2.75px) rotate(-45deg); }
+
+  .nav__links {
+    position: fixed; top: 0; left: 0; right: 0; z-index: -1;
+    flex-direction: column; gap: 0;
+    padding: 4.4rem var(--pad) 1.25rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55);
+    transform: translateY(-100%); visibility: hidden;
+    /* delay visibility until the slide-out finishes */
+    transition: transform .5s var(--ease), visibility 0s linear .5s;
+  }
+  .nav.is-open .nav__links { transform: none; visibility: visible; transition: transform .5s var(--ease), visibility 0s; }
+  .nav__links a {
+    padding: .95rem 0; border-radius: 0;
+    font-family: var(--font-display); font-size: 1.3rem; font-weight: 600;
+    letter-spacing: -.02em; color: var(--ink);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav__links a:last-child { border-bottom: 0; }
+  .nav__links a::before { display: none; }
+  .nav__links a span { font-size: .7rem; font-weight: 400; letter-spacing: 0; }
+  .nav__links a.is-active { color: var(--accent-ink); }
+}
 
 /* ── hero ──────────────────────────────────────────────────── */
 .hero {
@@ -330,16 +389,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: transform .5s var(--ease);
 }
 .btn:hover::before { transform: translateY(0); }
-.btn:hover { color: #fff; border-color: transparent; }
+.btn:hover { color: var(--on-accent); border-color: transparent; }
 .btn:hover svg { transform: translateY(3px); }
 .btn--primary {
   background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  color: #fff; border-color: transparent;
+  color: var(--on-accent); border-color: transparent;
   box-shadow: 0 6px 26px rgba(255, 92, 53, .3);
 }
 .btn--primary::before { background: transparent; }
 .btn--primary:hover { box-shadow: 0 12px 44px rgba(255, 92, 53, .42); }
-.btn.is-copied { color: #fff; border-color: transparent; }
+.btn.is-copied { color: var(--on-accent); border-color: transparent; }
 .btn.is-copied::before { transform: translateY(0); }
 
 /* ── marquee ───────────────────────────────────────────────── */
@@ -367,7 +426,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .section::before {
   content: ''; position: absolute; z-index: -1; pointer-events: none;
   top: 0; left: 50%; transform: translateX(-50%);
-  width: min(1100px, 120%); height: 460px;
+  /* wider than 100% causes horizontal scroll on mobile */
+  width: min(1100px, 100%); height: 460px;
   background: radial-gradient(ellipse at 50% 0%, var(--sa-glow), transparent 70%);
   opacity: .55;
 }
@@ -491,17 +551,21 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .work__client { display: block; font-size: .84rem; color: var(--ink-3); margin-top: .25rem; }
 .work__stack { font-family: var(--font-mono); font-size: .68rem; color: var(--ink-2); text-align: right; white-space: nowrap; }
 
+/* Only collapse rows when JS is running. */
 .work__detail {
-  display: grid; grid-template-rows: 0fr;
+  display: grid; grid-template-rows: 1fr;
   transition: grid-template-rows .55s var(--ease);
 }
+.js .work__detail { grid-template-rows: 0fr; }
 .work__detail > * { overflow: hidden; }
-.work.is-open .work__detail { grid-template-rows: 1fr; }
+.js .work.is-open .work__detail { grid-template-rows: 1fr; }
 .work__detail-in {
   padding-left: calc(3.2rem + clamp(.75rem, 2vw, 2rem) + clamp(.5rem, 1.5vw, 1.4rem));
   padding-right: clamp(.5rem, 1.5vw, 1.4rem);
+  padding-bottom: clamp(1.3rem, 2.6vw, 2rem);
 }
-.work.is-open .work__detail-in { padding-bottom: clamp(1.3rem, 2.6vw, 2rem); }
+.js .work:not(.is-open) .work__detail-in { padding-bottom: 0; }
+html:not(.js) .work__chev { display: none; }
 .work__detail p { max-width: 62ch; color: var(--ink-2); font-size: .92rem; }
 .work__detail strong { color: var(--ink); font-weight: 600; }
 .work__link {
@@ -529,10 +593,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: .84rem; color: var(--ink-2);
   transition: color .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease);
 }
-.also i { font-style: normal; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .06em; color: var(--ink-3); }
+.also i { font-style: normal; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .06em; color: var(--ink-3); }
 .also a:hover { color: var(--ink); border-color: var(--sa); background: var(--surface); transform: translateY(-2px); }
 .also a:hover i { color: var(--sa-ink); }
-.also span { opacity: .62; }
+/* unlinked items */
+.also span { color: var(--ink-3); border-style: dashed; }
 
 .allrepos {
   display: inline-flex; align-items: center; gap: .6rem;
@@ -574,9 +639,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .oss__sub  { font-size: .74rem; color: var(--ink-3); }
 .oss__badge {
   margin-left: auto; flex: none;
-  font-family: var(--font-mono); font-size: .6rem;
+  font-family: var(--font-mono); font-size: .66rem;
   letter-spacing: .12em; text-transform: uppercase;
-  color: #fff; background: var(--grad-sa);
+  color: var(--on-accent); background: var(--grad-sa);
   padding: .3rem .65rem; border-radius: 100px;
 }
 .oss__msg {
@@ -625,13 +690,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: background .45s var(--ease);
 }
 .tl:hover { background: var(--surface); }
-.tl__when { font-family: var(--font-mono); font-size: .74rem; padding-top: .35rem; }
+/* Dot sits on the rail; dates are indented past it. */
+.tl__when { position: relative; font-family: var(--font-mono); font-size: .74rem; padding: .35rem 0 0 1.4rem; }
 .tl__when span { display: block; color: var(--ink); }
 .tl__when em { display: block; font-style: normal; color: var(--ink-3); }
 .tl__when::before {
-  content: ''; display: block;
+  content: ''; position: absolute; left: 0; top: calc(.35rem + .3em);
   width: 8px; height: 8px; border-radius: 50%;
-  background: var(--grad-sa); margin-bottom: .7rem;
+  background: var(--grad-sa);
   box-shadow: 0 0 0 4px var(--bg), 0 0 18px var(--sa-glow);
   transition: transform .4s var(--ease);
 }
@@ -646,8 +712,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: inline-block; vertical-align: middle;
   margin-left: .55rem; padding: .16rem .55rem;
   border-radius: 100px;
-  background: var(--grad-sa); color: #fff;
-  font-family: var(--font-mono); font-size: .56rem; font-weight: 500;
+  background: var(--grad-sa); color: var(--on-accent);
+  font-family: var(--font-mono); font-size: .64rem; font-weight: 500;
   letter-spacing: .12em; text-transform: uppercase;
 }
 .tl__org { font-family: var(--font-mono); font-size: .74rem; color: var(--sa-ink); margin: .3rem 0 .8rem; }
@@ -680,10 +746,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: color .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease);
 }
 .stack__group li:hover {
-  color: #fff; background: var(--grad-sa);
+  color: var(--on-accent); background: var(--grad-sa);
   border-color: transparent; transform: translateY(-2px);
 }
-:root[data-theme='light'] .stack__group li:hover { color: #fff; }
 
 .creds { display: grid; gap: clamp(2rem, 5vw, 4rem); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: clamp(3rem, 8vh, 5rem); }
 .cred h3 {
@@ -797,6 +862,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .boot-failed [data-anim] { opacity: 1 !important; transform: none !important; }
 .boot-failed .lede .w { opacity: 1 !important; }
+.boot-failed .work__detail { grid-template-rows: 1fr; }
+.boot-failed .work:not(.is-open) .work__detail-in { padding-bottom: clamp(1.3rem, 2.6vw, 2rem); }
+.boot-failed .work__chev { display: none; }
 
 /* ── reduced motion ────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
