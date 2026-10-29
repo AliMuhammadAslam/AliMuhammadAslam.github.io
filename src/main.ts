@@ -16,12 +16,25 @@ const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document
 /* ── theme ────────────────────────────────────────────────────── */
 /* The initial value is resolved by the inline head script to avoid a flash;
    this only wires up the toggle. */
+const THEME_COLOR = { dark: '#0d0b15', light: '#fbfbfc' } as const;
+
 function initTheme() {
   const root = document.documentElement;
-  $('#theme-toggle')?.addEventListener('click', () => {
+  const toggle = $('#theme-toggle');
+  const meta = $<HTMLMetaElement>('meta[name="theme-color"]');
+
+  const sync = () => {
+    const theme = root.dataset.theme === 'light' ? 'light' : 'dark';
+    toggle?.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
+    meta?.setAttribute('content', THEME_COLOR[theme]);
+  };
+  sync();
+
+  toggle?.addEventListener('click', () => {
     const next = root.dataset.theme === 'light' ? 'dark' : 'light';
     root.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch { /* private mode */ }
+    sync();
   });
 }
 

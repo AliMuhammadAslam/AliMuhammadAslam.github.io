@@ -24,7 +24,7 @@
   --line-soft: rgba(255, 195, 172, .085);
   --ink:       #fdf8f6;
   --ink-2:     #c0b3b6;
-  --ink-3:     #8b7d85;
+  --ink-3:     #968890;
 
   /* Per-section accent. Overridden by [data-accent] blocks below so each
      section carries its own hue without needing bespoke rules. */
@@ -68,7 +68,7 @@
   --line-soft: rgba(18, 22, 33, .07);
   --ink:       #0e1116;
   --ink-2:     #494f5a;
-  --ink-3:     #7f8794;
+  --ink-3:     #646b78;
 }
 :root[data-theme='light'] [data-accent='coral']  { --sa: #e8451a; --sa-2: #b06f00; --sa-ink: #bf3309; --sa-glow: rgba(232, 69, 26, .14); }
 :root[data-theme='light'] [data-accent='violet'] { --sa: #7c3aed; --sa-2: #db2777; --sa-ink: #6d28d9; --sa-glow: rgba(124, 58, 237, .13); }
@@ -211,7 +211,7 @@ main[tabindex='-1']:focus, section[tabindex='-1']:focus { outline: none; }
   transition: transform .4s var(--ease), opacity .3s;
 }
 .nav__links a:hover::before, .nav__links a.is-active::before { transform: scale(1); opacity: 1; }
-.nav__links a span { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-3); transition: color .3s; }
+.nav__links a span { font-family: var(--font-mono); font-size: .66rem; color: var(--ink-3); transition: color .3s; }
 .nav__links a:hover, .nav__links a.is-active { color: var(--ink); }
 .nav__links a.is-active span { color: var(--accent-ink); }
 
@@ -537,10 +537,11 @@ html:not(.js) .work__chev { display: none; }
   font-size: .84rem; color: var(--ink-2);
   transition: color .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease);
 }
-.also i { font-style: normal; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .06em; color: var(--ink-3); }
+.also i { font-style: normal; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .06em; color: var(--ink-3); }
 .also a:hover { color: var(--ink); border-color: var(--sa); background: var(--surface); transform: translateY(-2px); }
 .also a:hover i { color: var(--sa-ink); }
-.also span { opacity: .62; }
+/* unlinked items */
+.also span { color: var(--ink-3); border-style: dashed; }
 
 .allrepos {
   display: inline-flex; align-items: center; gap: .6rem;
@@ -582,7 +583,7 @@ html:not(.js) .work__chev { display: none; }
 .oss__sub  { font-size: .74rem; color: var(--ink-3); }
 .oss__badge {
   margin-left: auto; flex: none;
-  font-family: var(--font-mono); font-size: .6rem;
+  font-family: var(--font-mono); font-size: .66rem;
   letter-spacing: .12em; text-transform: uppercase;
   color: #fff; background: var(--grad-sa);
   padding: .3rem .65rem; border-radius: 100px;
@@ -633,13 +634,14 @@ html:not(.js) .work__chev { display: none; }
   transition: background .45s var(--ease);
 }
 .tl:hover { background: var(--surface); }
-.tl__when { font-family: var(--font-mono); font-size: .74rem; padding-top: .35rem; }
+/* Dot sits on the rail; dates are indented past it. */
+.tl__when { position: relative; font-family: var(--font-mono); font-size: .74rem; padding: .35rem 0 0 1.4rem; }
 .tl__when span { display: block; color: var(--ink); }
 .tl__when em { display: block; font-style: normal; color: var(--ink-3); }
 .tl__when::before {
-  content: ''; display: block;
+  content: ''; position: absolute; left: 0; top: calc(.35rem + .3em);
   width: 8px; height: 8px; border-radius: 50%;
-  background: var(--grad-sa); margin-bottom: .7rem;
+  background: var(--grad-sa);
   box-shadow: 0 0 0 4px var(--bg), 0 0 18px var(--sa-glow);
   transition: transform .4s var(--ease);
 }
@@ -655,7 +657,7 @@ html:not(.js) .work__chev { display: none; }
   margin-left: .55rem; padding: .16rem .55rem;
   border-radius: 100px;
   background: var(--grad-sa); color: #fff;
-  font-family: var(--font-mono); font-size: .56rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: .64rem; font-weight: 500;
   letter-spacing: .12em; text-transform: uppercase;
 }
 .tl__org { font-family: var(--font-mono); font-size: .74rem; color: var(--sa-ink); margin: .3rem 0 .8rem; }
