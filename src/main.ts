@@ -578,6 +578,14 @@ function initCopy() {
       }, 1800);
     });
   });
+
+  // mailto does nothing without a mail app set up, so copy the address too.
+  $$<HTMLAnchorElement>('a[href^="mailto:"]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const mail = a.href.slice('mailto:'.length);
+      navigator.clipboard?.writeText(mail).then(() => flash('Email copied to clipboard'), () => {});
+    });
+  });
 }
 
 /* ── footer year ──────────────────────────────────────────────── */
