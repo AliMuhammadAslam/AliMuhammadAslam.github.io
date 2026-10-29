@@ -41,25 +41,36 @@ function initScroll(): Lenis | null {
   return lenis;
 }
 
+/* Nav offset comes from scroll-padding-top in CSS, which Lenis respects. */
 function initAnchors(lenis: Lenis | null) {
+  // preventDefault also stops the browser moving focus, so do it here.
+  const focusTarget = (el: HTMLElement) => {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+  };
+
+  const scrollToTop = () => {
+    if (lenis) lenis.scrollTo(0);
+    else window.scrollTo({ top: 0 });
+    const main = $('#top');
+    if (main) focusTarget(main);
+  };
+
   $$<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href')!;
       if (id === '#') return;
-      const target = id === '#top' ? 0 : $(id);
-      if (target === null) return;
       e.preventDefault();
-      const offset = id === '#top' ? 0 : -70;
-      if (lenis) lenis.scrollTo(target as HTMLElement | 0, { offset });
-      else if (target === 0) window.scrollTo({ top: 0 });
-      else (target as HTMLElement).scrollIntoView();
+      if (id === '#top') return scrollToTop();
+      const target = $(id);
+      if (!target) return;
+      if (lenis) lenis.scrollTo(target);
+      else target.scrollIntoView();
+      focusTarget(target);
     });
   });
 
-  $('#totop')?.addEventListener('click', () => {
-    if (lenis) lenis.scrollTo(0);
-    else window.scrollTo({ top: 0 });
-  });
+  $('#totop')?.addEventListener('click', scrollToTop);
 }
 
 /* ── split text into animatable characters ────────────────────── */
@@ -414,23 +425,49 @@ function initTilt() {
    information while sitting directly on top of the title being read. The
    chevron in the row does the same job without covering anything. */
 function initWork() {
-  $$('.work').forEach((item) => {
+  // Failsafe already expanded the rows.
+  if (document.documentElement.classList.contains('boot-failed')) return;
+  const items = $$('.work');
+
+  // Refresh once the row transition ends. The timeout covers browsers that
+  // can't animate grid-template-rows.
+  let fallback = 0;
+  let pending = 0;
+  const refresh = () => {
+    window.clearTimeout(fallback);
+    window.clearTimeout(pending);
+    // closing and opening rows fire together
+    pending = window.setTimeout(() => ScrollTrigger.refresh(), 0);
+  };
+
+  const setOpen = (item: HTMLElement, open: boolean) => {
+    item.classList.toggle('is-open', open);
+    $('.work__toggle', item)?.setAttribute('aria-expanded', String(open));
+    // keep links in collapsed rows out of the tab order
+    const detail = $('.work__detail', item);
+    if (detail) detail.inert = !open;
+  };
+
+  items.forEach((item, i) => {
     const toggle = $<HTMLButtonElement>('.work__toggle', item);
-    if (!toggle) return;
+    const detail = $('.work__detail', item);
+    if (!toggle || !detail) return;
+
+    detail.id ||= `work-detail-${i + 1}`;
+    toggle.setAttribute('aria-controls', detail.id);
+    setOpen(item, false);
+
+    detail.addEventListener('transitionend', (e) => {
+      if (e.target === detail && e.propertyName === 'grid-template-rows') refresh();
+    });
 
     toggle.addEventListener('click', () => {
       const open = item.classList.contains('is-open');
       // Accordion: only one row expanded at a time.
-      $$('.work').forEach((o) => {
-        o.classList.remove('is-open');
-        $('.work__toggle', o)?.setAttribute('aria-expanded', 'false');
-      });
-      if (!open) {
-        item.classList.add('is-open');
-        toggle.setAttribute('aria-expanded', 'true');
-      }
-      // Row heights changed, so every trigger below this point has moved.
-      ScrollTrigger.refresh();
+      items.forEach((o) => setOpen(o, false));
+      if (!open) setOpen(item, true);
+      window.clearTimeout(fallback);
+      fallback = window.setTimeout(refresh, 700);
     });
   });
 }
