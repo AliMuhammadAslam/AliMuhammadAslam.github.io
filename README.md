@@ -25,8 +25,14 @@ npm run deploy   # build and publish to the gh-pages branch
 
 Everything lives in `index.html`. There is no CMS and no data layer. Projects are
 `<li class="work">` entries; add one by copying a neighbour and updating the index
-number, `data-preview` key, and `data-href`.
+number and text. Personal projects link to source with a `.work__link`.
 
 - `src/style.css` holds design tokens at the top (`:root`), then sections in order.
 - `src/gl.ts` is the hero shader.
 - `src/main.ts` is all interaction, one function per concern.
+- `public/` is copied to the site root as-is: `og.png` (social preview, 1200×630),
+  `apple-touch-icon.png`, `robots.txt`, `sitemap.xml` and `404.html`.
+
+When the page content changes, update `<lastmod>` in `public/sitemap.xml`. If the
+title or role changes, update the meta tags and JSON-LD in the `<head>` and
+regenerate `og.png`.
